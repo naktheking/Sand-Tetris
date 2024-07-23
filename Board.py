@@ -32,6 +32,7 @@ def tetrinoInformations(app):
     # app.boardWithList = [[None for i in range(app.cols)] for j in range(app.rows)]
     app.tetrinoBoard = [[None for i in range(app.cols//2)] for j in range(app.rows//2)]
     app.currentTetrinoPosition = None
+    app.tetrinoColor = 'orange'
 
 def gravityInformation(app):
     #check if the blocks are moving
@@ -62,7 +63,7 @@ def drawBoardBorder(app):
 def createSand(app, row, col):
     if app.board.get((row,col)) == None:
         app.isSandMoving = True
-        app.board[(row, col)] = 'orange'
+        app.board[(row, col)] = app.tetrinoColor
 
 def coordToRowAndCol(app, x, y):
     row = int((y-app.topBoardCoordinate)/app.cellHeight)
@@ -80,12 +81,19 @@ def onKeyPress(app, key):
     if key == 's':
         #returns as (shape, color)
         app.currentTetrinoPosition = getNextPiece(app)
+    if key == '0':
+        app.tetrinoColor = TetrinoColors[0]
+    elif key == '1':
+        app.tetrinoColor = TetrinoColors[1]
+    elif key == '2':
+        app.tetrinoColor = TetrinoColors[2]
+    elif key == '3':
+        app.tetrinoColor = TetrinoColors[3]
 
 def onStep(app):
     #if sand is not moving, no need to move it down; Saves time for checking
     if app.isSandMoving == True:
         moveSandsDown(app)
-    print(app.isSandMoving)
     moveEverythingDown(app)
 
 def redrawAll(app):
