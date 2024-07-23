@@ -1,6 +1,5 @@
 import random
 
-
 #check if the next position of the block is valid and legal
 def isOnBoardAndValid(app, nextRow, nextCol):
     if nextRow >= app.rows or nextCol < 0 or nextCol >= app.cols or (nextRow, nextCol) in app.board:
@@ -9,7 +8,6 @@ def isOnBoardAndValid(app, nextRow, nextCol):
 
 #move each sand particle down
 def moveSandsDown(app):
-
     #establishing directions and positions to remove once inside the for loop
     direction = [(1, -1), (1, +1)]
     valuesToRemove = set()
