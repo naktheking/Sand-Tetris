@@ -1,11 +1,12 @@
 from cmu_graphics import *
 from Gravity import *
 from Tetrinos import *
+from ClearLevel import *
 
 def onAppStart(app):
     #Changing graphic display settings
     app.setMaxShapeCount(30000)
-    app.stepsPerSecond = 100
+    app.stepsPerSecond = 300
     app.width = 700
     app.height = 700
     boardInformations(app)
@@ -23,6 +24,7 @@ def boardInformations(app):
     app.cellWidth = app.boardWidth/app.cols
     app.cellHeight = app.boardHeight/app.rows
     # app.boardWithList = [[None for i in range(app.cols)] for j in range(app.rows)]
+    #app.board is a dictionary; keys are the coordinates; values are the color
     app.board = {}
     app.borderWidth = 0.2
 
@@ -93,9 +95,11 @@ def onKeyPress(app, key):
 def onStep(app):
     #if sand is not moving, no need to move it down; Saves time for checking
     if app.isSandMoving == True:
+        
         moveSandsDown(app)
     moveEverythingDown(app)
-
+    findAllColorGroupOnLeft(app)
+    
 def redrawAll(app):
     drawBoard(app)
 

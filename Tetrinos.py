@@ -1,5 +1,10 @@
 import random
 
+class TetrinosPieces():
+    def __init__(self, name, shape):
+        self.name = name
+        self.shape = shape
+        
 allTetrinoPieces = {
     #coordinate value of all tetrino pieces with (0, 0) at left-top
     'i-piece': [(0, 0), (0, 1), (0, 2), (0, 3)],
