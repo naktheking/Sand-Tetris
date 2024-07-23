@@ -6,7 +6,7 @@ from ClearLevel import *
 def onAppStart(app):
     #Changing graphic display settings
     app.setMaxShapeCount(30000)
-    app.stepsPerSecond = 300
+    app.stepsPerSecond = 100
     app.width = 700
     app.height = 700
     boardInformations(app)
@@ -15,7 +15,7 @@ def onAppStart(app):
 
 #Board information: size, width, height, border width
 def boardInformations(app):
-    app.cols = 50
+    app.cols = 24
     app.rows = 2*app.cols
     app.boardWidth = app.width/2
     app.boardHeight = app.height-20
@@ -96,11 +96,9 @@ def onStep(app):
     #if sand is not moving, no need to move it down; Saves time for checking
     if app.isSandMoving == True:
         moveSandsDown(app)
-    
-    # moveEverythingDown(app)
     else:
+        # moveEverythingDown(app)
         allColorsOnLeft = findAllColorGroupOnLeft(app)
-        print(allColorsOnLeft)
         for i in allColorsOnLeft.keys():
             print(checkLevelConnected(app, i, 0, allColorsOnLeft[i]))
 
