@@ -39,6 +39,7 @@ def tetrinoInformations(app):
 def gravityInformation(app):
     #check if the blocks are moving
     app.isSandMoving = False
+    app.gravityStepsPerSecond = 0
 
 def drawBoard(app):
     #Doesn't need to draw each grid
@@ -97,10 +98,14 @@ def onStep(app):
     if app.isSandMoving == True:
         moveSandsDown(app)
     else:
+        app.gravityStepsPerSecond += 1
         # moveEverythingDown(app)
-        allColorsOnLeft = findAllColorGroupOnLeft(app)
-        for i in allColorsOnLeft.keys():
-            print(checkLevelConnected(app, i, 0, allColorsOnLeft[i]))
+        if app.gravityStepsPerSecond % 10 == 0:
+            app.gravityStepsPerSecond -= 10
+            allColorsOnLeft = findAllColorGroupOnLeft(app)
+            for i in allColorsOnLeft.keys():
+                levelConnected = checkLevelConnected(app, i, 0, allColorsOnLeft[i])
+
 
 def redrawAll(app):
     drawBoard(app)

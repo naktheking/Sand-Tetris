@@ -18,8 +18,6 @@ def findAllColorGroupOnLeft(app):
     #key: row     value: color
     return allPixelColorOnLeft 
 
-coordinatesToRemoveInLevel = set()
-
 def checkLevelConnected(app, row, col, color, prevDirection = None):
     #the directions are right, up, down; diagonals doesn't counts as connected
     directions = {(0 ,1), (-1, 0), (1, 0)}
@@ -27,18 +25,61 @@ def checkLevelConnected(app, row, col, color, prevDirection = None):
     if (row, col) not in app.board or app.board[(row, col)] != color:
         return False
     if (col == (app.cols-1)):
-        coordinatesToRemoveInLevel.add((row, col))
         return True
-    
     else:
+        #Erases the opposite of the previous direction so current pixel wouldn't go backwards
         if prevDirection != None:
             pRow, pCol = prevDirection
             directions.remove((-pRow, pCol))
+        #Check every direction around the pixel to see if it's the same color
         for drow, dcol in directions:
             newRow = drow+row
             newCol = dcol+col
             result = checkLevelConnected(app, newRow, newCol, color, (drow, dcol))
             if result:
-                coordinatesToRemoveInLevel.add((newRow, newCol))
                 return True
     return False
+
+# def clearConnectedRow(app, row, col, color):
+#     if ((row < 0) or (row >= app.rows) or
+#         (col < 0) or (col >= app.cols) or
+#         (app.board[(row, col)] == color)):
+#         return
+#     else:
+#         app.board.pop(row, col)
+#         clearConnectedRow(app, row + 1, col, color)
+#         clearConnectedRow(app, row, col, color)
+#         clearConnectedRow(app, row + 1, col + 1, color)
+#         clearConnectedRow(app, row, col + 1, color)
+
+
+
+# def clearConnectedRow(app):
+#     queue = []
+
+
+
+
+
+# #save all the points of same color to a set to remove later if the level is connected
+# coordinatesToRemoveInLevel = set()
+# #DFS way to do
+# def findAllFloodFillPixels(app, row, col, color):
+#     color = app.board.get((row, col), None):
+#     if color == None:
+#         return False
+#     else:
+#         findAllFloodFillPixels(app, row, col, color)
+#         findAllFloodFillPixels(app, row+1, col, color)
+#         findAllFloodFillPixels(app, row, col+1, color)
+#         findAllFloodFillPixels(app, row+1, col+1, color)
+
+
+
+# def clearConnectedLevels(app):
+#     for rowToRemove, colToRemove in coordinatesToRemoveInLevel:
+#         app.board.pop((rowToRemove, colToRemove))
+
+# def changeConnectedLevelColor(app):
+#     for rowToRemove, colToRemove in coordinatesToRemoveInLevel:
+#         app.board[(rowToRemove, colToRemove)] = 'purple'
