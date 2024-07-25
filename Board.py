@@ -41,6 +41,9 @@ def gravityInformation(app):
     app.isSandMoving = False
     app.gravityStepsPerSecond = 0
 
+def gameInformation(app):
+    app.paused = False
+
 def drawBoard(app):
     #Doesn't need to draw each grid
     #turns from O(N^2) to O(N)
@@ -95,23 +98,33 @@ def onKeyPress(app, key):
 
 def onStep(app):
     #if sand is not moving, no need to move it down; Saves time for checking
-    if app.isSandMoving == True:
+    if app.isSandMoving == True and app.paused == False:
         moveSandsDown(app)
     
     #returns a dictionary of the top of the color groups on the left side
     #key: row     value: color
-    colorGroups = findAllColorGroupOnLeft(app)
-    
-    print(colorGroups.keys(), colorGroups.values())
-    # else:
-    #     app.gravityStepsPerSecond += 1
-    #     # moveEverythingDown(app)
-    #     if app.gravityStepsPerSecond % 10 == 0:
-    #         app.gravityStepsPerSecond -= 10
-    #         allColorsOnLeft = findAllColorGroupOnLeft(app)
-    #         # for i in allColorsOnLeft.keys():
-    #         #     levelConnected = checkLevelConnected(app, i, 0, allColorsOnLeft[i])
+    else:
+        levelsToClear = []
+        app.gravityStepsPerSecond += 1
+        if app.gravityStepsPerSecond%100==0:
+            colorGroups = findAllColorGroupOnLeft(app)
+            for row in colorGroups.keys():
+                color = colorGroups[row]
+                if checkLevelConnected(app, row, 0, color):
+                    levelsToClear.append((row, color))
 
+        while levelsToClear != []:
+            app.paused = True
+            print(levelsToClear)
+            row, color = levelsToClear[0]
+            clearLevel(app, row, 0, color)
+            levelsToClear.remove((row, color))
+
+            # for i in range(len(levelsToClear)):
+            #     row,color = levelsToClear[i]
+            #     clearLevel(app, row, 0, color)
+            #     levelsToClear.remove((row, color))
+        app.paused = False
 
 def redrawAll(app):
     drawBoard(app)
