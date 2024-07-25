@@ -1,4 +1,7 @@
 from functools import cache
+from Gravity import isOnBoardAndValid
+
+
 def findAllColorGroupOnLeft(app):
     allPixelColorOnLeft = {}
     for i in range(app.rows-1, -1, -1):
@@ -18,8 +21,11 @@ def findAllColorGroupOnLeft(app):
     #key: row     value: color
     return allPixelColorOnLeft 
 
+#Used simple recursion to check if level is connected
+#Also called DFS learned from Lauren Sands
 def checkLevelConnected(app, row, col, color, prevDirection = None):
     #the directions are right, up, down; diagonals doesn't counts as connected
+    print('checking level')
     directions = {(0 ,1), (-1, 0), (1, 0)}
     #check if the current pixel is on the right side of the board
     if (row, col) not in app.board or app.board[(row, col)] != color:
@@ -39,6 +45,31 @@ def checkLevelConnected(app, row, col, color, prevDirection = None):
             if result:
                 return True
     return False
+
+
+def clearLevel(app, row, col, color):
+    pixelsToClear = clearLevelHelper(app, row, col, color)
+    for (row,col) in pixelsToClear:
+        app.board.remove((row,col))
+
+#BFS learned from Lauren Sands
+def clearLevelHelper(app, row, col, color):
+    filledCells = {(row, col)}
+    cellsToExplore = [(row, col)]
+    directions = [(0 ,1), (-1, 0), (1, 0), (0, -1)]
+
+    while cellsToExplore:
+        row, col = cellsToExplore.pop(0)
+        for direction in directions:
+            newRow = row + direction[0]
+            newCol = col + direction[1]
+
+            if (isOnBoardAndValid(app, newRow, newCol) and 
+            (newRow, newCol) not in filledCells and 
+            app.board[(newRow, newCol)] == color):
+                cellsToExplore.append((newRow, newCol))
+                filledCells.add((newRow, newCol))
+    return filledCells
 
 # def clearConnectedRow(app, row, col, color):
 #     if ((row < 0) or (row >= app.rows) or
