@@ -97,14 +97,20 @@ def onStep(app):
     #if sand is not moving, no need to move it down; Saves time for checking
     if app.isSandMoving == True:
         moveSandsDown(app)
-    else:
-        app.gravityStepsPerSecond += 1
-        # moveEverythingDown(app)
-        if app.gravityStepsPerSecond % 10 == 0:
-            app.gravityStepsPerSecond -= 10
-            allColorsOnLeft = findAllColorGroupOnLeft(app)
-            for i in allColorsOnLeft.keys():
-                levelConnected = checkLevelConnected(app, i, 0, allColorsOnLeft[i])
+    
+    #returns a dictionary of the top of the color groups on the left side
+    #key: row     value: color
+    colorGroups = findAllColorGroupOnLeft(app)
+    
+    print(colorGroups.keys(), colorGroups.values())
+    # else:
+    #     app.gravityStepsPerSecond += 1
+    #     # moveEverythingDown(app)
+    #     if app.gravityStepsPerSecond % 10 == 0:
+    #         app.gravityStepsPerSecond -= 10
+    #         allColorsOnLeft = findAllColorGroupOnLeft(app)
+    #         # for i in allColorsOnLeft.keys():
+    #         #     levelConnected = checkLevelConnected(app, i, 0, allColorsOnLeft[i])
 
 
 def redrawAll(app):

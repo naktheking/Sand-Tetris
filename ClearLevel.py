@@ -1,7 +1,8 @@
 from functools import cache
 from Gravity import isOnBoardAndValid
 
-
+#returns a dictionary of the top of the color groups on the left side
+#key: row     value: color
 def findAllColorGroupOnLeft(app):
     allPixelColorOnLeft = {}
     for i in range(app.rows-1, -1, -1):
@@ -17,8 +18,7 @@ def findAllColorGroupOnLeft(app):
             else:
                 allPixelColorOnLeft[i] = currentColor
     
-    #returns a dictionary of the top of the color groups on the left side
-    #key: row     value: color
+
     return allPixelColorOnLeft 
 
 #Used simple recursion to check if level is connected
@@ -70,6 +70,8 @@ def clearLevelHelper(app, row, col, color):
                 cellsToExplore.append((newRow, newCol))
                 filledCells.add((newRow, newCol))
     return filledCells
+
+
 
 # def clearConnectedRow(app, row, col, color):
 #     if ((row < 0) or (row >= app.rows) or
