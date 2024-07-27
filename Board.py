@@ -71,29 +71,29 @@ def drawTetromino(app, startRow, startCol):
 #Functions
 
 
-# def checkAndClearConnectedRows(app):
+def checkAndClearConnectedRows(app):
+    levelsToClear = []
+    #slow the run speed down 10 times
+    app.gravityStepsPerSecond += 1
+    if app.gravityStepsPerSecond%10==0:
+        #checking each color groups if they're connected
+        colorGroups = findAllColorGroupOnLeft(app)
+        for row in colorGroups.keys():
+            color = colorGroups[row]
+            if checkLevelConnected(app, row, 0, color):
+                levelsToClear.append((row, color))
 
-#     #if sand is not moving, no need to move it down; Saves time for checking
-    
-#     #returns a dictionary of the top of the color groups on the left side
-#     #key: row     value: color
-#     levelsToClear = []
+    #clear the connected rows
+    while levelsToClear != []:
+        app.paused = True
+        row, color = levelsToClear[0]
+        print('Got the level')
+        clearLevel(app, row, 0, color)
+        print('Cleared the level')
+        print('---------------')
+        levelsToClear.remove((row, color))
+    app.paused = False
 
-#     colorGroups = findAllColorGroupOnLeft(app)
-#     for row in colorGroups.keys():
-#         color = colorGroups[row]
-#         if checkLevelConnected(app, row, 0, color):
-#             levelsToClear.append((row, color))
-
-#     while levelsToClear != []:
-#         app.paused = True
-#         row, color = levelsToClear[0]
-#         print('Got the level')
-#         clearLevel(app, row, 0, color)
-#         print('Cleared the level')
-#         print('---------------')
-#         levelsToClear.remove((row, color))
-#     app.paused = False
 
 def createSand(app, row, col):
     if app.board.get((row,col)) == None:
@@ -130,40 +130,9 @@ def onStep(app):
     #if sand is not moving, no need to move it down; Saves time for checking
     if app.isSandMoving == True and app.paused == False:
         moveSandsDown(app)
-    
-    #returns a dictionary of the top of the color groups on the left side
-    #key: row     value: color
     else:
-        levelsToClear = []
-        app.gravityStepsPerSecond += 1
-        if app.gravityStepsPerSecond%10==0:
-            colorGroups = findAllColorGroupOnLeft(app)
-            for row in colorGroups.keys():
-                color = colorGroups[row]
-                if checkLevelConnected(app, row, 0, color):
-                    levelsToClear.append((row, color))
-
-        while levelsToClear != []:
-            app.paused = True
-            row, color = levelsToClear[0]
-            print('Got the level')
-            clearLevel(app, row, 0, color)
-            print('Cleared the level')
-            print('---------------')
-            levelsToClear.remove((row, color))
-        app.paused = False
+        checkAndClearConnectedRows(app)
     
-    # if not app.paused:
-    #     moveTetrinosDown(app)
-    #     if app.isSandMoving:
-    #         moveSandsDown(app)
-    #     else:
-    #         app.paused = not app.paused
-    # else:
-    #     app.gravityStepsPerSecond += 1
-    #     if app.gravityStepsPerSecond%10==0:
-    #         checkAndClearConnectedRows(app)
-
 def redrawAll(app):
     drawBoard(app)
 
