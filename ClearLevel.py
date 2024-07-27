@@ -47,41 +47,72 @@ def clearLevel(app, row, col, color):
     if row == None:
         return
     pixelsToClear = clearLevelHelper(app, row, col, color)
+    print('Amount of pixels connected ',len(pixelsToClear))
     for (row,col) in pixelsToClear:
         app.board.pop((row,col))
     return True
         
 
 #BFS learned from Lauren Sands
+@cache
 def clearLevelHelper(app, row, col, color):
     filledCells = set()
     cellsToExplore = [(row, col)]
     directions = [(0 ,1), (0, -1), (1, 0), (-1, 0)]
-    
-    
+    #efficiency test
     maxNum = 0
+    
+    
+    
+    
+    while cellsToExplore != []:      
 
-    while cellsToExplore != []:
-        
+
+
+
+
+        #seeing how efficent code it: will delete later
         if len(cellsToExplore) > maxNum:
             maxNum = len(cellsToExplore)
 
 
-        row, col = cellsToExplore.pop(0)
-        #check around the cell if any is same color and not in filled Cell
-        for direction in directions:
-            newRow = row + direction[0]
-            newCol = col + direction[1]
 
-            filledCells.add((row, col))
+
+
+        currRow, currCol = cellsToExplore.pop(0)
+        # print('cells to explore', cellsToExplore)
+        # print('current row and col',row, col)
+        # print('------')
+        #check around the cell if any is same color and not in filled Cell
+        filledCells.add((currRow, currCol))
+
+        for direction in directions:
+            newRow = currRow + direction[0]
+            newCol = currCol + direction[1]
+            print('1st row and col to compare',newRow, newCol)
+            print('--------')
+            print((isOnBoard(app, newRow, newCol)))
+            print(((newRow, newCol) not in filledCells))
+            print((app.board.get((newRow, newCol), None) == color))
+            print('--------')
+            # print((isOnBoard(app, newRow, newCol)) and 
+            # ((newRow, newCol) not in filledCells) and 
+            # (app.board.get((newRow, newCol), None) == color))
 
             if ((isOnBoard(app, newRow, newCol)) and 
             ((newRow, newCol) not in filledCells) and 
             (app.board.get((newRow, newCol), None) == color)):
+                
+                print('2nd row and col to compare',newRow, newCol)
                 cellsToExplore.append((newRow, newCol))
-    print(filledCells)
+    
+    # print(filledCells)
     print(maxNum)
+
+
+
+
     return filledCells
 
 def isOnBoard(app, nextRow, nextCol):
-    return (0 <= nextRow < app.rows) and (0 <= nextCol  < app.cols)
+    return (0 <= nextRow < app.rows) and (0 <= nextCol < app.cols)
