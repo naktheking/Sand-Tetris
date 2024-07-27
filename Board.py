@@ -30,8 +30,7 @@ def boardInformations(app):
 
 #Tetrino informations: size, color
 def tetrinoInformations(app):
-    app.tetrinoSize = app.cols//8
-    # app.boardWithList = [[None for i in range(app.cols)] for j in range(app.rows)]
+    app.tetrinoSize = app.cols//3
     app.tetrinoBoard = [[None for i in range(app.cols//2)] for j in range(app.rows//2)]
     app.currentTetrinoPosition = None
     app.tetrinoColor = 'orange'

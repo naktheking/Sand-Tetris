@@ -5,21 +5,22 @@ class TetrinosPieces():
         self.name = name
         self.shape = shape
     
-        
-allTetrinoPieces = {
-    #coordinate value of all tetrino pieces with (0, 0) at left-top
-    'i-piece': [(0, 0), (0, 1), (0, 2), (0, 3)],
-    'j-piece': [(0, 0), (1, 0), (1, 1), (1, 2)],
-    'l-piece': [(1, 0), (1, 1), (1, 2), (0, 2)],
-    'o-piece': [(0, 0), (0, 1), (1, 0), (1, 1)],    
-    's-piece': [(1, 0), (1, 1), (0, 1), (0, 2)],
-    't-piece': [(0, 1), (1, 0), (1, 1), (1, 2)],
-    'z-piece': [(0, 0), (0, 1), (1, 1), (1, 2)]
-}
+# Define each Tetrimino piece
+ipiece = TetrinosPieces('ipiece', [(0, 0), (0, 1), (0, 2), (0, 3)])
+jpiece = TetrinosPieces('jpiece', [(0, 0), (1, 0), (1, 1), (1, 2)])
+lpiece = TetrinosPieces('lpiece', [(1, 0), (1, 1), (1, 2), (0, 2)])
+opiece = TetrinosPieces('opiece', [(0, 0), (0, 1), (1, 0), (1, 1)])
+spiece = TetrinosPieces('spiece', [(1, 0), (1, 1), (0, 1), (0, 2)])
+tpiece = TetrinosPieces('tpiece', [(0, 1), (1, 0), (1, 1), (1, 2)])
+zpiece = TetrinosPieces('zpiece', [(0, 0), (0, 1), (1, 1), (1, 2)])
+
+# Add all pieces to a list
+allTetrinoPieces = [ipiece, jpiece, lpiece, opiece, spiece, tpiece, zpiece]
+
 
 TetrinoColors = ['red', 'green', 'yellow', 'blue']
 
 #returns a random selection of a tetrino piece and a random tetrino color in a tuple
 def getNextPiece(app):
-    return (random.choice(allTetrinoPieces.keys()), random.choice(TetrinoColors))
+    return (random.choice(allTetrinoPieces), random.choice(TetrinoColors))
 
