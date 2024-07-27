@@ -106,7 +106,7 @@ def onStep(app):
     else:
         levelsToClear = []
         app.gravityStepsPerSecond += 1
-        if app.gravityStepsPerSecond%100==0:
+        if app.gravityStepsPerSecond%10==0:
             colorGroups = findAllColorGroupOnLeft(app)
             for row in colorGroups.keys():
                 color = colorGroups[row]
@@ -121,11 +121,6 @@ def onStep(app):
             clearLevel(app, row, 0, color)
             print('made it 2')
             levelsToClear.remove((row, color))
-
-            # for i in range(len(levelsToClear)):
-            #     row,color = levelsToClear[i]
-            #     clearLevel(app, row, 0, color)
-            #     levelsToClear.remove((row, color))
         app.paused = False
 
 def redrawAll(app):

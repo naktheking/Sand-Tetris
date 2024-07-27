@@ -57,8 +57,18 @@ def clearLevelHelper(app, row, col, color):
     filledCells = set()
     cellsToExplore = [(row, col)]
     directions = [(0 ,1), (0, -1), (1, 0), (-1, 0)]
+    
+    
+    maxNum = 0
+
     while cellsToExplore != []:
+        
+        if len(cellsToExplore) > maxNum:
+            maxNum = len(cellsToExplore)
+
+
         row, col = cellsToExplore.pop(0)
+        #check around the cell if any is same color and not in filled Cell
         for direction in directions:
             newRow = row + direction[0]
             newCol = col + direction[1]
@@ -69,7 +79,8 @@ def clearLevelHelper(app, row, col, color):
             ((newRow, newCol) not in filledCells) and 
             (app.board.get((newRow, newCol), None) == color)):
                 cellsToExplore.append((newRow, newCol))
-    
+    print(filledCells)
+    print(maxNum)
     return filledCells
 
 def isOnBoard(app, nextRow, nextCol):
