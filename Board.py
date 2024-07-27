@@ -119,6 +119,7 @@ def onStep(app):
             print('Got the level')
             clearLevel(app, row, 0, color)
             print('Cleared the level')
+            print('---------------')
             levelsToClear.remove((row, color))
         app.paused = False
 

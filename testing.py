@@ -1,5 +1,5 @@
-slist = [(1, 2), (3, 4)]
+a = {'a':1, 
+     'b':2,
+     'c':3}
 
-row ,col = slist.pop(0)
-
-print(row, col)
+print(a.get('a'))
