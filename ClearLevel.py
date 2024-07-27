@@ -1,5 +1,4 @@
 from functools import cache
-from Gravity import isOnBoardAndValid
 
 #returns a dictionary of the top of the color groups on the left side
 #key: row     value: color
@@ -52,7 +51,6 @@ def clearLevel(app, row, col, color):
         app.board.pop((row,col))
     return True
         
-
 #BFS learned from Lauren Sands
 def clearLevelHelper(app, row, col, color):
     filledCells = set()

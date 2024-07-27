@@ -45,5 +45,5 @@ def moveSandsDown(app):
         lrow, lcol = keys
         app.board.pop((lrow, lcol))
 
-def moveEverythingDown(app):
+def moveTetrinosDown(app):
     pass

@@ -1,5 +1,9 @@
-a = {'a':1, 
-     'b':2,
-     'c':3}
+class test():
+    def __init__(self, name):
+        self.name = name
+    def getit(self):
+        return len(self.name)
+    
+a = test('steven')
 
-print(a.get('a'))
+print(a.getit())
