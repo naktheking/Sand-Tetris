@@ -60,14 +60,15 @@ def drawBoardBorder(app):
 
 def drawTetromino(app):
     piece, color = getNextPiece(app)
+    startCol = ((app.cols-piece.getLengthOfCol())//2)
     lengthOfRow, lengthOfCol = piece.getLengthOfRow(), piece.getLengthOfCol()
     for row in range(lengthOfRow):
         for col in range(lengthOfCol):    
                 if piece.checkCondition(row, col) == True:
                     for innerRow in range(app.tetrinoSize):
                         for innerCol in range(app.tetrinoSize):
-                            app.board[((row * app.tetrinoSize + innerRow), (col * app.tetrinoSize + innerCol + app.cols//2))] = color
-    app.isSandMoving = True
+                            app.board[((row * app.tetrinoSize + innerRow), (col * app.tetrinoSize + innerCol + startCol))] = color
+    app.isSandMoving = False
 
 def getStartingTetrominoSpot(app, piece):
     pass
