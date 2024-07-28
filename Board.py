@@ -30,9 +30,10 @@ def boardInformations(app):
     app.borderWidth = 0.2
 def tetrinoInformations(app):
     app.tetrinoSize = app.cols//10
-    app.tetrinoBoard = [[None for i in range(app.cols//2)] for j in range(app.rows//2)]
-    app.currentTetrinoPosition = None
-    app.tetrinoColor = 'orange'
+    #stores each coordinates of the tetrino pieces as (row, col, color)
+    #only 1 tetrino at a time
+    app.tetrinoPiece = []
+    app.tetrinoColor = 'red'
 def gravityInformation(app):
     #check if the blocks are moving
     app.isSandMoving = False
@@ -52,34 +53,25 @@ def drawCell(app, row, col, color = None):
     cellLeft = app.leftBoardCoordinate + col*app.cellWidth
     cellTop = app.topBoardCoordinate + row*app.cellHeight
     drawRect(cellLeft, cellTop, app.cellWidth, app.cellHeight, fill = color, 
-             border = 'black', borderWidth = app.borderWidth)
+             border = None)
 
 def drawBoardBorder(app):
     drawRect(app.leftBoardCoordinate, app.topBoardCoordinate, app.boardWidth, app.boardHeight,
              fill = None, border = 'gray', borderWidth = 2*app.borderWidth)
 
 def drawTetromino(app):
-    piece, color = getNextPiece(app)
-    startCol = ((app.cols-piece.getLengthOfCol())//2)
-    lengthOfRow, lengthOfCol = piece.getLengthOfRow(), piece.getLengthOfCol()
-    for row in range(lengthOfRow):
-        for col in range(lengthOfCol):    
-                if piece.checkCondition(row, col) == True:
-                    for innerRow in range(app.tetrinoSize):
-                        for innerCol in range(app.tetrinoSize):
-                            app.board[((row * app.tetrinoSize + innerRow), (col * app.tetrinoSize + innerCol + startCol))] = color
-    app.isSandMoving = False
+    for row, col, color in app.tetrinoPiece:
+        drawCell(app, row, col, color)
 
-def getStartingTetrominoSpot(app, piece):
-    pass
 
+    
 
 #Functions
 def checkAndClearConnectedRows(app):
     levelsToClear = []
     #slow the run speed down 10 times
     app.gravityStepsPerSecond += 1
-    if app.gravityStepsPerSecond%20==0:
+    if app.gravityStepsPerSecond%10==0:
         #checking each color groups if they're connected
         colorGroups = findAllColorGroupOnLeft(app)
         for row in colorGroups.keys():
@@ -119,7 +111,7 @@ def onKeyPress(app, key):
         app.isSandMoving = True
         createSand(app, 0, 10)
     if key == 's':
-        drawTetromino(app)
+        getNewTetromino(app)
     if key == '0':
         app.tetrinoColor = TetrinoColors[0]
     elif key == '1':
@@ -132,11 +124,15 @@ def onKeyPress(app, key):
 def onStep(app):
     #if sand is not moving, no need to move it down; Saves time for checking
     if app.isSandMoving == True and app.paused == False:
+
+        moveTetromino(app)
         moveSandsDown(app)
+
     else:
         checkAndClearConnectedRows(app)
     
 def redrawAll(app):
+    drawTetromino(app)
     drawBoard(app)
 
 def main():
