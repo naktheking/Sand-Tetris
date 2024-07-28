@@ -1,5 +1,4 @@
 import random
-import cmu_graphics
 
 
 class TetrinosPieces():

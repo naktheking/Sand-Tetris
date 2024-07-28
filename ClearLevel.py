@@ -1,5 +1,3 @@
-from functools import cache
-
 #returns a dictionary of the top of the color groups on the left side
 #key: row     value: color
 def findAllColorGroupOnLeft(app):

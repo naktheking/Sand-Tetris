@@ -29,7 +29,7 @@ def boardInformations(app):
     app.board = {}
     app.borderWidth = 0.2
 def tetrinoInformations(app):
-    app.tetrinoSize = app.cols//8
+    app.tetrinoSize = app.cols//10
     app.tetrinoBoard = [[None for i in range(app.cols//2)] for j in range(app.rows//2)]
     app.currentTetrinoPosition = None
     app.tetrinoColor = 'orange'
@@ -58,24 +58,27 @@ def drawBoardBorder(app):
     drawRect(app.leftBoardCoordinate, app.topBoardCoordinate, app.boardWidth, app.boardHeight,
              fill = None, border = 'gray', borderWidth = 2*app.borderWidth)
 
-def drawTetromino(app, startRow, startCol):
+def drawTetromino(app):
     piece, color = getNextPiece(app)
     lengthOfRow, lengthOfCol = piece.getLengthOfRow(), piece.getLengthOfCol()
     for row in range(lengthOfRow):
-        for col in range(lengthOfCol):
-            if piece.checkCondition(row, col) == True:
-                app.board[(row+startRow, col+startCol)] = color
+        for col in range(lengthOfCol):    
+                if piece.checkCondition(row, col) == True:
+                    for innerRow in range(app.tetrinoSize):
+                        for innerCol in range(app.tetrinoSize):
+                            app.board[((row * app.tetrinoSize + innerRow), (col * app.tetrinoSize + innerCol + app.cols//2))] = color
     app.isSandMoving = True
+
+def getStartingTetrominoSpot(app, piece):
+    pass
 
 
 #Functions
-
-
 def checkAndClearConnectedRows(app):
     levelsToClear = []
     #slow the run speed down 10 times
     app.gravityStepsPerSecond += 1
-    if app.gravityStepsPerSecond%10==0:
+    if app.gravityStepsPerSecond%20==0:
         #checking each color groups if they're connected
         colorGroups = findAllColorGroupOnLeft(app)
         for row in colorGroups.keys():
@@ -93,7 +96,6 @@ def checkAndClearConnectedRows(app):
         print('---------------')
         levelsToClear.remove((row, color))
     app.paused = False
-
 
 def createSand(app, row, col):
     if app.board.get((row,col)) == None:
@@ -116,7 +118,7 @@ def onKeyPress(app, key):
         app.isSandMoving = True
         createSand(app, 0, 10)
     if key == 's':
-        drawTetromino(app, 1, 10)
+        drawTetromino(app)
     if key == '0':
         app.tetrinoColor = TetrinoColors[0]
     elif key == '1':
