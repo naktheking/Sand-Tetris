@@ -17,7 +17,6 @@ class TetrinosPieces():
     def getLengthOfCol(self):
         return len(self.shape[0])
 
-
 # Define each Tetrimino piece
 ipiece = TetrinosPieces([[True, True, True, True]])
 jpiece = TetrinosPieces([[True, False, False],
@@ -40,7 +39,6 @@ TetrinoColors = ['red', 'green', 'yellow', 'blue']
 #check if tetromino contacts with current sand blocks
 def tetrominoContact(app, tetrominoCoords):
     for row, col, color in tetrominoCoords:
-        print(row, col)
         if (row, col) in app.board or row == app.rows-1:
             return True
     return False

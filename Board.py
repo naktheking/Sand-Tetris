@@ -8,7 +8,7 @@ from ClearLevel import *
 def onAppStart(app):
     #Changing graphic display settings
     app.setMaxShapeCount(30000)
-    app.stepsPerSecond = 20
+    app.stepsPerSecond = 50
     app.width = 700
     app.height = 700
     boardInformations(app)

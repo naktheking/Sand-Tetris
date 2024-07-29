@@ -16,28 +16,30 @@ def findAllColorGroupOnLeft(app):
                 allPixelColorOnLeft[i] = currentColor
     return allPixelColorOnLeft 
 
-#Used simple recursion to check if level is connected
-#Also called DFS learned from Lauren Sands
-def checkLevelConnected(app, row, col, color, prevDirection = None):
-    #the directions are right, up, down; diagonals doesn't counts as connected
-    directions = {(0 ,1), (-1, 0), (1, 0)}
-    #check if the current pixel is on the right side of the board
-    if (row, col) not in app.board or app.board[(row, col)] != color:
-        return False
-    if (col == (app.cols-1)):
-        return True
-    else:
-        #Erases the opposite of the previous direction so current pixel wouldn't go backwards
-        if prevDirection != None:
-            pRow, pCol = prevDirection
-            directions.remove((-pRow, pCol))
-        #Check every direction around the pixel to see if it's the same color
-        for drow, dcol in directions:
-            newRow = drow+row
-            newCol = dcol+col
-            result = checkLevelConnected(app, newRow, newCol, color, (drow, dcol))
-            if result:
-                return True
+#DFS with stack learned from Lauren Sands
+#given row and col is the top block of a color group
+def checkLevelConnected(app, row, col, color):
+    filledCells = set()
+    cellsToExplore = [(row, col)]
+    #if the cell is already in cells to explore, no need to add it again and check it again
+    #checking if the cell already in the explore list is faster when a set of same elements exist
+    cellsToExploreSet = set((row,col))
+    directions = [(0, -1), (-1, 0), (1, 0), (0, 1)]
+
+    while cellsToExplore != []:
+        currRow, currCol = cellsToExplore.pop()
+        if currCol == app.cols-1:
+            return True
+        #check around the cell if any is same color and not in filled Cell
+        for direction in directions:
+            newRow = currRow + direction[0]
+            newCol = currCol + direction[1]
+            if ((isOnBoard(app, newRow, newCol)) and 
+            ((newRow, newCol) not in filledCells) and 
+            (app.board.get((newRow, newCol), None) == color) and
+            ((newRow, newCol) not in cellsToExploreSet)):
+                cellsToExplore.append((newRow, newCol))
+                cellsToExploreSet.add((newRow, newCol))
     return False
 
 def clearLevel(app, row, col, color):
@@ -49,14 +51,14 @@ def clearLevel(app, row, col, color):
         app.board.pop((row,col))
     return True
         
-#BFS learned from Lauren Sands
+#BFS with stack learned from Lauren Sands
 def clearLevelHelper(app, row, col, color):
     filledCells = set()
     cellsToExplore = [(row, col)]
     #if the cell is already in cells to explore, no need to add it again and check it again
     #checking if the cell already in the explore list is faster when a set of same elements exist
     cellsToExploreSet = set((row,col))
-    directions = [(0 ,1), (1, 0), (-1, 0), (0, -1)]    
+    directions = [(0 ,1), (1, 0), (-1, 0), (0, -1)]
     while cellsToExplore != []:
         currRow, currCol = cellsToExplore.pop(0)
         #check around the cell if any is same color and not in filled Cell
@@ -68,7 +70,6 @@ def clearLevelHelper(app, row, col, color):
             ((newRow, newCol) not in filledCells) and 
             (app.board.get((newRow, newCol), None) == color) and
             ((newRow, newCol) not in cellsToExploreSet)):
-                # print('2nd row and col to compare',newRow, newCol)
                 cellsToExplore.append((newRow, newCol))
                 cellsToExploreSet.add((newRow, newCol))
     return filledCells
