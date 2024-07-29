@@ -2,6 +2,7 @@ from cmu_graphics import *
 from Gravity import *
 from Tetrinos import *
 from ClearLevel import *
+from gameStatus import *
 
 
 #Informations and modules
@@ -16,8 +17,9 @@ def onAppStart(app):
     gravityInformation(app)
     gameInformation(app)
     pausedScreenInformation(app)
+    endScreenInformation(app)
 def boardInformations(app):
-    app.cols = 24
+    app.cols = 10
     app.rows = 2*app.cols
     app.boardWidth = app.width/2
     app.boardHeight = app.height-20
@@ -53,7 +55,14 @@ def pausedScreenInformation(app):
     app.newGameTopCoord = 383
     app.newGameWidth = 150
     app.newGameHeight = 40
-    
+def endScreenInformation(app):
+    app.newGameLeft, app.newGameTop = 250, 398
+    app.newGameWidth, app.newGameHeight = 200, 40
+
+
+
+
+
 #Drawing
 def drawBoard(app):
     for row, col in app.board:
@@ -75,38 +84,44 @@ def drawTetromino(app):
         drawCell(app, row, col, color)
 
 def drawBackground(app):
-    drawRect(0, 0, app.width, app.height, fill = None)
+    drawRect(0, 0, app.width, app.height, fill = 'black')
 
 def drawPausedScreen(app):
-    drawRect(app.leftBoardCoordinate, app.topBoardCoordinate, app.boardWidth, app.boardHeight, fill = 'black', opacity = 75)
-    drawRect(app.boardWidth/2 + app.leftBoardCoordinate, 2*app.boardHeight/5, 120, 50, align = 'center', fill = 'gray')
-    drawLabel('resume', app.boardWidth/2 + app.leftBoardCoordinate, 2*app.boardHeight/5, bold = True, font='monospace', 
+    peru = rgb(205, 133, 63)
+    chocolate = rgb(210, 105, 30)
+    gray = rgb(43, 43, 40)
+
+    drawRect(0, 0, app.width, app.height, fill = gray, opacity = 50)
+    
+    drawLabel('PAUSED',app.width/2, app.height/5, size = 24)
+
+    drawRect(app.width/2, 2*app.height/5, 120, 50, align = 'center', fill = peru)
+    drawLabel('RESUME', app.width/2, 2*app.height/5, bold = True, font='monospace', 
                size = 24)
-    drawRect(app.boardWidth/2 + app.leftBoardCoordinate, 3*app.boardHeight/5, 150, 50, align = 'center', fill = 'gray')
-    drawLabel('new game', app.boardWidth/2 + app.leftBoardCoordinate, 3*app.boardHeight/5, bold = True, font='monospace', 
+    
+    drawRect(app.width/2, 3*app.height/5, 150, 50, align = 'center', fill = chocolate)
+    drawLabel('NEW GAME', app.width/2, 3*app.height/5, bold = True, font='monospace', 
                size = 24)
+
+def drawEndScreen(app):
+    drawRect(app.leftBoardCoordinate, app.topBoardCoordinate, app.boardWidth, 
+             app.boardHeight, fill = 'black', opacity = 70)
+
+    drawLabel('GAME OVER', app.boardWidth/2+app.leftBoardCoordinate, 
+              app.boardHeight/4+app.topBoardCoordinate, bold = True, 
+              font='monospace', size = 30, fill = 'white')
+
+
+    drawRect(app.boardWidth/2+app.leftBoardCoordinate,
+             3*app.boardHeight/5+app.topBoardCoordinate, 200, 40, align = 'center', 
+             fill = 'white')
+    drawLabel('New Game', app.boardWidth/2+app.leftBoardCoordinate,
+               3*app.boardHeight/5+app.topBoardCoordinate, bold = True, 
+               font='orbitron', size = 30)
+
 
 
 #Functions
-def checkAndClearConnectedRows(app):
-    levelsToClear = []
-    #slow the run speed down 10 times
-    app.gravityStepsPerSecond += 1
-    if app.gravityStepsPerSecond%10==0:
-        #checking each color groups if they're connected
-        colorGroups = findAllColorGroupOnLeft(app)
-        for row in colorGroups.keys():
-            color = colorGroups[row]
-            if checkLevelConnected(app, row, 0, color):
-                levelsToClear.append((row, color))
-
-    #clear the connected rows
-    while levelsToClear != []:
-        app.paused = True
-        row, color = levelsToClear[0]
-        clearLevel(app, row, 0, color)
-        levelsToClear.remove((row, color))
-    app.paused = False
 
 def createSand(app, row, col):
     if app.board.get((row,col)) == None:
@@ -121,8 +136,10 @@ def coordToRowAndCol(app, x, y):
 def resetGame(app):
     app.board = {}
     app.tetrinoPiece = []
-    app.paused = not app.paused
+    app.paused = False
+    app.gameOver = False
     getNewTetromino(app)
+
 
 
 #Event Handlers
@@ -136,24 +153,27 @@ def resetGame(app):
 #         resetGame(app)
 
 def onMousePress(app, mouseX, mouseY):
-    if (app.resumeLeftCoord < mouseX < app.resumeWidth + app.resumeLeftCoord and 
-        app.resumeTopCoord < mouseY < app.resumeTopCoord + app.resumeHeight):
-        app.paused = not app.paused
-    if (app.newGameLeftCoord < mouseX < app.newGameLeftCoord + app.newGameWidth and 
-        app.newGameTopCoord < mouseY < app.newGameTopCoord + app.newGameHeight):
-        resetGame(app)
+    if app.gameOver:
+        if (app.newGameLeft < mouseX < app.newGameLeft+app.newGameWidth and 
+            app.newGameTop < mouseY < app.newGameTop+app.newGameHeight):
+            resetGame(app)
+    
+    if app.paused and not app.gameOver:
+        if (app.resumeLeftCoord < mouseX < app.resumeWidth + app.resumeLeftCoord and 
+            app.resumeTopCoord < mouseY < app.resumeTopCoord + app.resumeHeight):
+            app.paused = not app.paused
+        if (app.newGameLeftCoord < mouseX < app.newGameLeftCoord + app.newGameWidth and 
+            app.newGameTopCoord < mouseY < app.newGameTopCoord + app.newGameHeight):
+            resetGame(app)
 
 def onMouseDrag(app, mouseX, mouseY):
     row, col = coordToRowAndCol(app, mouseX, mouseY)
     createSand(app, row, col)
 
 def onKeyPress(app, key):
-    if key == 'a':
-        app.isSandMoving = True
-        createSand(app, 0, 10)
     if key == 's':
         getNewTetromino(app)
-    if key == 'p':
+    elif key == 'p':
         app.paused = not app.paused
 
     if key == '0':
@@ -165,15 +185,20 @@ def onKeyPress(app, key):
     elif key == '3':
         app.tetrinoColor = TetrinoColors[3]
 
+    if key == 'up':
+        rotate2dListClockwise(app.tetrinoPiece)
+        print(app.tetrinoPiece)
+
 def onKeyHold(app, keys):
-    if 'down' in keys:
-        moveTetromino(app, 1, 0)
+    if not app.paused:
+        if 'down' in keys:
+            moveTetromino(app, 1, 0)
 
-    if 'left' in keys:
-        moveTetromino(app, 0, -1)
+        if 'left' in keys:
+            moveTetromino(app, 0, -1)
 
-    if 'right' in keys:
-        moveTetromino(app, 0, 1)
+        if 'right' in keys:
+            moveTetromino(app, 0, 1)
 
 def onStep(app):
     #if sand is not moving, no need to move it down; Saves time for checking
@@ -187,7 +212,9 @@ def redrawAll(app):
     drawBackground(app)
     drawTetromino(app)
     drawBoard(app)
-    if app.paused:
+    if app.gameOver:
+        drawEndScreen(app)
+    if app.paused and not app.gameOver:
         drawPausedScreen(app)
 
 def main():

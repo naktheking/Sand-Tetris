@@ -76,3 +76,23 @@ def clearLevelHelper(app, row, col, color):
 
 def isOnBoard(app, nextRow, nextCol):
     return (0 <= nextRow < app.rows) and (0 <= nextCol < app.cols)
+
+def checkAndClearConnectedRows(app):
+    levelsToClear = []
+    #slow the run speed down 10 times
+    app.gravityStepsPerSecond += 1
+    if app.gravityStepsPerSecond%10==0:
+        #checking each color groups if they're connected
+        colorGroups = findAllColorGroupOnLeft(app)
+        for row in colorGroups.keys():
+            color = colorGroups[row]
+            if checkLevelConnected(app, row, 0, color):
+                levelsToClear.append((row, color))
+
+    #clear the connected rows
+    while levelsToClear != []:
+        app.paused = True
+        row, color = levelsToClear[0]
+        clearLevel(app, row, 0, color)
+        levelsToClear.remove((row, color))
+    app.paused = False

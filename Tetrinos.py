@@ -1,6 +1,7 @@
 import random
 from Gravity import isOnBoardAndValid
-from ClearLevel import isOnBoard
+from gameStatus import *
+
 
 class TetrinosPieces():
     #shape is a 2d list with True being the pixel exists and False if it doesn't
@@ -49,6 +50,9 @@ def tetrominoContact(app, tetrominoCoords):
 #then scale it proportion to the board and add it to the app.tetrino list
 def getNewTetromino(app):
     piece, color = getNextPiece()
+    turnPieceToFitBoard(app, piece, color)
+
+def turnPieceToFitBoard(app, piece, color):
     startCol = ((app.cols-piece.getLengthOfCol())//2)
     lengthOfRow, lengthOfCol = piece.getLengthOfRow(), piece.getLengthOfCol()
     for row in range(lengthOfRow):
@@ -58,6 +62,9 @@ def getNewTetromino(app):
                         for innerCol in range(app.tetrinoSize):
                             app.tetrinoPiece.append(((row * app.tetrinoSize + innerRow), (col * app.tetrinoSize + innerCol + startCol), color))
     app.isSandMoving = True
+
+def turnCoordsToPieces(app, tetrinolist):
+    pass
 
 #moves each piece of the tetromino down by 1
 #check if it tounches the board
@@ -98,6 +105,18 @@ def moveTetromino(app, drow, dcol):
             app.board[(row, col)] = color
         app.tetrinoPiece = []
         getNewTetromino(app)
+        checkGameOver(app)
+
+
+#rotates tetromino clockwise
+def rotate2dListClockwise(L):
+    M = []
+    for j in range(len(L[0])):
+        list = []
+        for i in range(len(L)-1,-1,-1):
+            list.append(L[i][j])
+        M.append(list)
+    return M
 
 #returns a random selection of a tetrino piece and a random tetrino color in a tuple
 def getNextPiece():
