@@ -83,10 +83,7 @@ def checkAndClearConnectedRows(app):
     while levelsToClear != []:
         app.paused = True
         row, color = levelsToClear[0]
-        print('Got the level')
         clearLevel(app, row, 0, color)
-        print('Cleared the level')
-        print('---------------')
         levelsToClear.remove((row, color))
     app.paused = False
 
@@ -101,7 +98,7 @@ def coordToRowAndCol(app, x, y):
     return row, col
 
 
-#Event Handlers; Controllers
+#Event Handlers
 def onMouseDrag(app, mouseX, mouseY):
     row, col = coordToRowAndCol(app, mouseX, mouseY)
     createSand(app, row, col)
@@ -153,5 +150,4 @@ def redrawAll(app):
 
 def main():
     runApp()
-
 main()
