@@ -109,7 +109,6 @@ def getRightmostCol(app):
         if maxCol == None or col > maxCol:
             maxCol = col
     return maxCol
-
 def getLeftmostCol(app):
     minCol = None
     for row, col, color in app.tetrinoPiece:
