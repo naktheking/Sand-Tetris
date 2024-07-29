@@ -8,7 +8,7 @@ from ClearLevel import *
 def onAppStart(app):
     #Changing graphic display settings
     app.setMaxShapeCount(30000)
-    app.stepsPerSecond = 50
+    app.stepsPerSecond = 20
     app.width = 700
     app.height = 700
     boardInformations(app)
@@ -34,6 +34,7 @@ def tetrinoInformations(app):
     #only 1 tetrino at a time
     app.tetrinoPiece = []
     app.tetrinoColor = 'red'
+    app.tetrinoStepsPerSecond = 0
 def gravityInformation(app):
     #check if the blocks are moving
     app.isSandMoving = False
@@ -64,7 +65,6 @@ def drawTetromino(app):
         drawCell(app, row, col, color)
 
 
-    
 
 #Functions
 def checkAndClearConnectedRows(app):
@@ -112,6 +112,18 @@ def onKeyPress(app, key):
         createSand(app, 0, 10)
     if key == 's':
         getNewTetromino(app)
+    if key == 'p':
+        app.paused = not app.paused
+    if key == 'left':
+        print('moving left')
+        moveTetromino(app, 0, -(app.tetrinoSize))
+    if key == 'right':
+        print('moving right')
+        moveTetromino(app, 0, (app.tetrinoSize))
+    if key == 'down':
+        print('moving down')
+        moveTetromino(app, (app.tetrinoSize), 0)
+    
     if key == '0':
         app.tetrinoColor = TetrinoColors[0]
     elif key == '1':
@@ -123,14 +135,18 @@ def onKeyPress(app, key):
 
 def onStep(app):
     #if sand is not moving, no need to move it down; Saves time for checking
-    if app.isSandMoving == True and app.paused == False:
-
-        moveTetromino(app)
-        moveSandsDown(app)
-
-    else:
-        checkAndClearConnectedRows(app)
     
+    if not app.paused:
+        #move row down 1 row and 0 col
+        app.tetrinoStepsPerSecond += 1
+        if app.tetrinoStepsPerSecond % 5 == 0:
+            app.tetrinoStepsPerSecond -= 5
+            moveTetromino(app, 1, 0)
+
+        moveSandsDown(app)
+        if not app.isSandMoving:
+            checkAndClearConnectedRows(app)
+
 def redrawAll(app):
     drawTetromino(app)
     drawBoard(app)

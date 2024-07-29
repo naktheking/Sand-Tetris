@@ -1,4 +1,5 @@
 import random
+from Gravity import isOnBoardAndValid
 
 class TetrinosPieces():
     #shape is a 2d list with True being the pixel exists and False if it doesn't
@@ -39,11 +40,10 @@ TetrinoColors = ['red', 'green', 'yellow', 'blue']
 #check if tetromino contacts with current sand blocks
 def tetrominoContact(app, tetrominoCoords):
     for row, col, color in tetrominoCoords:
-        if (row, col) in app.board:
+        print(row, col)
+        if (row, col) in app.board or row == app.rows-1:
             return True
-        else:
-            return False
-
+    return False
 
 
 #chooses a random tetrimino piece and a random color
@@ -60,17 +60,26 @@ def getNewTetromino(app):
                             app.tetrinoPiece.append(((row * app.tetrinoSize + innerRow), (col * app.tetrinoSize + innerCol + startCol), color))
     app.isSandMoving = True
 
-def moveTetromino(app):
+#moves each piece of the tetromino down by 1
+#check if it tounches the board
+#if it does, turn everything into sands and spawn a new piece
+def moveTetromino(app, drow, dcol):
+    newTetrinoPiece = []
     for i in range(len(app.tetrinoPiece)):
         row, col, color = app.tetrinoPiece[i]
-        app.tetrinoPiece[i] = (row+1, col, color)
+        newRow, newCol = row+drow, col+dcol
+        if isOnBoardAndValid(app, newRow, newCol):
+            newTetrinoPiece.append((newRow, newCol, color))
+        else:
+            return
+    app.tetrinoPiece = newTetrinoPiece
 
     if tetrominoContact(app, app.tetrinoPiece):
+        print('made it 1')
         for row, col, color in app.tetrinoPiece:
-            app.board[(row-1, col)] = color
+            app.board[(row, col)] = color
         app.tetrinoPiece = []
         getNewTetromino(app)
-
 
 #returns a random selection of a tetrino piece and a random tetrino color in a tuple
 def getNextPiece():
