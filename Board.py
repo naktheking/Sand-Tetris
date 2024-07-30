@@ -42,6 +42,10 @@ def tetrinoInformations(app):
     app.rotatedTetrinoShape = []
     #Expanded rotated Tetrino; adjusted for board size
     app.rotatedTetrinoPiece = []
+
+    #current location 
+    app.currRow = 0
+    app.currCol = 0
 def gravityInformation(app):
     #check if the blocks are moving
     app.isSandMoving = False
@@ -62,8 +66,6 @@ def pausedScreenInformation(app):
 def endScreenInformation(app):
     app.newGameLeft, app.newGameTop = 250, 398
     app.newGameWidth, app.newGameHeight = 200, 40
-
-
 
 
 
@@ -186,7 +188,6 @@ def onKeyPress(app, key):
         turnPieceShapeToCoord(app, rotatedPiece, app.tetrinoColor)
         app.rotatedTetrinoShape = rotatedPiece
 
-
 def onKeyHold(app, keys):
     if not app.paused:
         if 'down' in keys:
@@ -199,7 +200,7 @@ def onKeyHold(app, keys):
             moveTetromino(app, 0, 1)
 
 def onStep(app):
-    print(app.rotatedTetrinoShape)
+    print(app.currRow, app.currCol)
     #if sand is not moving, no need to move it down; Saves time for checking
     if not app.paused:
         #move row down 1 row and 0 col

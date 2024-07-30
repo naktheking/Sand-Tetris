@@ -53,10 +53,13 @@ def tetrominoContact(app, tetrominoCoords):
 #then scale it proportion to the board and add it to the app.tetrino list
 def getNewTetromino(app):
     piece, color = getNextPiece()
+    app.currRow = 0
+    app.currCol = (app.cols-piece.getLengthOfCol())//2
     app.rotatedTetrinoShape = piece.shape
     app.tetrinoColor = color
     turnPieceToCoord(app, piece, app.tetrinoColor)
 
+#expanding pieces to match the size of the board
 def turnPieceToCoord(app, piece, color):
     startCol = ((app.cols-piece.getLengthOfCol())//2)
     lengthOfRow, lengthOfCol = piece.getLengthOfRow(), piece.getLengthOfCol()
@@ -77,14 +80,14 @@ def turnPieceShapeToCoord(app, pieceShape, color):
     app.rotatedTetrinoPiece = []
     lengthOfRow, lengthOfCol = len(pieceShape), len(pieceShape[0])
     startCol = ((app.cols-lengthOfCol)//2)
-
-    print(pieceShape)
     for row in range(lengthOfRow):
         for col in range(lengthOfCol):   
             if pieceShape[row][col] == True:
                 for innerRow in range(app.tetrinoSize):
                     for innerCol in range(app.tetrinoSize):
-                        app.rotatedTetrinoPiece.append(((row * app.tetrinoSize + innerRow), (col * app.tetrinoSize + innerCol + startCol), color))
+                        app.rotatedTetrinoPiece.append(((row * app.tetrinoSize + innerRow) + app.currRow, 
+                                                        (col * app.tetrinoSize + innerCol) + app.currCol, 
+                                                        color))
     if checkRotateCondition(app, row, col):
         app.tetrinoPiece =  app.rotatedTetrinoPiece
     
@@ -98,12 +101,6 @@ def checkRotateCondition(app, row, col):
             (row, col) in app.board):
             return False
     return True
-    # if row > lengthOfRow or col > lengthOfCol:
-    #     return False
-    # return app.rotatedTetrinoShape[row][col]
-
-
-
 
 
 
@@ -114,12 +111,13 @@ def checkRotateCondition(app, row, col):
 #if it does, turn everything into sands and spawn a new piece
 def moveTetromino(app, drow, dcol):
     newTetrinoPiece = []
-    
+    moved = False
     for i in range(len(app.tetrinoPiece)):
         row, col, color = app.tetrinoPiece[i]
         newRow, newCol = row+drow, col+dcol
 
         if isOnBoardAndValid(app, newRow, newCol):
+            moved = True
             newTetrinoPiece.append((newRow, newCol, color))
         
         #Went off the board, either too left or too right
@@ -132,15 +130,19 @@ def moveTetromino(app, drow, dcol):
                 for row, col, color in app.tetrinoPiece:
                     newRow = row+drow
                     newTetrinoPiece.append((newRow, col-leftCol, color))
+                    moved = True
             #same thing with the right side but it should be the right edge - right most column
             if newCol >= app.cols:
                 rightCol = getRightmostCol(app)
                 dCol = app.cols-rightCol-1
                 for row, col, color in app.tetrinoPiece:
                     newRow = row+drow
-                    newTetrinoPiece.append((newRow, col + dCol, color))            
+                    newTetrinoPiece.append((newRow, col + dCol, color))  
+                    moved = True          
             break
-
+    if moved:
+        app.currRow += drow
+        app.currCol += dcol
     app.tetrinoPiece = newTetrinoPiece
 
     if tetrominoContact(app, app.tetrinoPiece):
@@ -151,7 +153,7 @@ def moveTetromino(app, drow, dcol):
         checkGameOver(app)
 
 
-#rotates tetromino clockwise
+#code copied from previous Tetris assignment on csacademy
 def rotate2dListClockwise(L):
     M = []
     for j in range(len(L[0])):
