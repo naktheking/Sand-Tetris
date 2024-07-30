@@ -45,8 +45,9 @@ def checkLevelConnected(app, row, col, color):
 def clearLevel(app, row, col, color):
     if row == None:
         return
+    # app.clearLevelSound.play()
     pixelsToClear = clearLevelHelper(app, row, col, color)
-    print('Amount of pixels connected ',len(pixelsToClear))
+    app.score += len(pixelsToClear)
     for (row,col) in pixelsToClear:
         app.board.pop((row,col))
     return True

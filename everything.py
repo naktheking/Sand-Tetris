@@ -87,10 +87,7 @@ def checkAndClearConnectedRows(app):
     while levelsToClear != []:
         app.paused = True
         row, color = levelsToClear[0]
-        print('Got the level')
         clearLevel(app, row, 0, color)
-        print('Cleared the level')
-        print('---------------')
         levelsToClear.remove((row, color))
     app.paused = False
 
@@ -331,7 +328,6 @@ def clearLevel(app, row, col, color):
     if row == None:
         return
     pixelsToClear = clearLevelHelper(app, row, col, color)
-    print('Amount of pixels connected ',len(pixelsToClear))
     for (row,col) in pixelsToClear:
         app.board.pop((row,col))
     return True
@@ -355,7 +351,6 @@ def clearLevelHelper(app, row, col, color):
             ((newRow, newCol) not in filledCells) and 
             (app.board.get((newRow, newCol), None) == color) and
             ((newRow, newCol) not in cellsToExploreSet)):
-                # print('2nd row and col to compare',newRow, newCol)
                 cellsToExplore.append((newRow, newCol))
                 cellsToExploreSet.add((newRow, newCol))
     return filledCells

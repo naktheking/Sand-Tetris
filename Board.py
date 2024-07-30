@@ -23,7 +23,7 @@ def boardInformations(app):
     app.rows = 2*app.cols
     app.boardWidth = app.width/2
     app.boardHeight = app.height-20
-    app.leftBoardCoordinate = app.width//2-(app.boardWidth//2)
+    app.leftBoardCoordinate = app.width//2-(7*app.boardWidth//10)
     app.topBoardCoordinate = app.height//2-(app.boardHeight//2)
     app.cellWidth = app.boardWidth/app.cols
     app.cellHeight = app.boardHeight/app.rows
@@ -51,8 +51,14 @@ def gravityInformation(app):
     app.isSandMoving = False
     app.gravityStepsPerSecond = 0
 def gameInformation(app):
+    app.score = 0
+    app.highestScore = 0
     app.paused = False
     app.gameOver = False
+    # sandCreedRd = 'SandCreekRd.m4a'
+    # sussy = 'syssy.m4a'
+    # app.clearLevelSound = Sound(sandCreedRd)
+    # app.gameOverSound = Sound(sussy)
 def pausedScreenInformation(app):
     app.resumeLeftCoord = 290
     app.resumeTopCoord = 247
@@ -125,7 +131,9 @@ def drawEndScreen(app):
                3*app.boardHeight/5+app.topBoardCoordinate, bold = True, 
                font='orbitron', size = 30)
 
-
+def drawScore(app):
+    drawLabel(f'Score: {app.score}', 4*app.width/5, 13*app.width/70, fill = 'white',
+              size = 24, bold = True)
 
 #Functions
 
@@ -142,6 +150,9 @@ def coordToRowAndCol(app, x, y):
 def resetGame(app):
     app.board = {}
     app.tetrinoPiece = []
+    if app.score > app.highestScore:
+        app.highestScore = app.score
+    app.score = 0
     app.paused = False
     app.gameOver = False
     getNewTetromino(app)
@@ -196,6 +207,7 @@ def onKeyPress(app, key):
 def onKeyHold(app, keys):
     if not app.paused:
         if 'down' in keys:
+            app.score += 1
             moveTetromino(app, 1, 0)
 
         if 'left' in keys:
@@ -205,7 +217,6 @@ def onKeyHold(app, keys):
             moveTetromino(app, 0, 1)
 
 def onStep(app):
-    print(app.currRow, app.currCol)
     #if sand is not moving, no need to move it down; Saves time for checking
     if not app.paused:
         #move row down 1 row and 0 col
@@ -216,6 +227,8 @@ def onStep(app):
 
 def redrawAll(app):
     drawBackground(app)
+    drawScore(app)
+
     drawTetromino(app)
     drawBoard(app)
     if app.gameOver:
