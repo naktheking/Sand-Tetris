@@ -44,6 +44,3 @@ def moveSandsDown(app):
     for keys in valuesToRemove:
         lrow, lcol = keys
         app.board.pop((lrow, lcol))
-
-def moveTetrinosDown(app):
-    pass

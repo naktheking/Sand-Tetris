@@ -75,7 +75,7 @@ def turnPieceToCoord(app, piece, color):
 
 
 
-
+#given the rotated piece shape 
 def turnPieceShapeToCoord(app, pieceShape, color):
     app.rotatedTetrinoPiece = []
     lengthOfRow, lengthOfCol = len(pieceShape), len(pieceShape[0])
@@ -89,6 +89,7 @@ def turnPieceShapeToCoord(app, pieceShape, color):
     newCol = len(app.rotatedTetrinoShape[0])
     app.currCol = centerCol - newCol//2
 
+
     for row in range(lengthOfRow):
         for col in range(lengthOfCol):   
             if pieceShape[row][col] == True:
@@ -101,6 +102,8 @@ def turnPieceShapeToCoord(app, pieceShape, color):
         app.rotatedTetrinoShape = pieceShape
         app.tetrinoPiece =  app.rotatedTetrinoPiece    
     app.isSandMoving = True
+
+
 
 def checkRotateCondition(app):
     for row, col, _ in app.rotatedTetrinoPiece:
