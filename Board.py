@@ -186,9 +186,7 @@ def onKeyPress(app, key):
         app.tetrinoColor = TetrinoColors[3]
 
     if key == 'up':
-        rotate2dListClockwise(app.tetrinoPiece)
-        print(app.tetrinoPiece)
-
+        pass
 def onKeyHold(app, keys):
     if not app.paused:
         if 'down' in keys:

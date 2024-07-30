@@ -18,6 +18,9 @@ class TetrinosPieces():
     
     def getLengthOfCol(self):
         return len(self.shape[0])
+    
+    def __repr__(self):
+        return str(self.shape)
 
 # Define each Tetrimino piece
 ipiece = TetrinosPieces([[True, True, True, True]])
@@ -41,7 +44,7 @@ TetrinoColors = ['red', 'green', 'yellow', 'blue']
 #check if tetromino contacts with current sand blocks
 #the +1 and -1 is there becuase row and col starts at 1 but dictionary coordiantes start at 0
 def tetrominoContact(app, tetrominoCoords):
-    for row, col, color in tetrominoCoords:
+    for row, col, _ in tetrominoCoords:
         if ((row+1, col) in app.board) or (row == app.rows-1):
             return True
     return False
@@ -50,9 +53,9 @@ def tetrominoContact(app, tetrominoCoords):
 #then scale it proportion to the board and add it to the app.tetrino list
 def getNewTetromino(app):
     piece, color = getNextPiece()
-    turnPieceToFitBoard(app, piece, color)
+    turnPieceToCoord(app, piece, color)
 
-def turnPieceToFitBoard(app, piece, color):
+def turnPieceToCoord(app, piece, color):
     startCol = ((app.cols-piece.getLengthOfCol())//2)
     lengthOfRow, lengthOfCol = piece.getLengthOfRow(), piece.getLengthOfCol()
     for row in range(lengthOfRow):
@@ -63,8 +66,6 @@ def turnPieceToFitBoard(app, piece, color):
                             app.tetrinoPiece.append(((row * app.tetrinoSize + innerRow), (col * app.tetrinoSize + innerCol + startCol), color))
     app.isSandMoving = True
 
-def turnCoordsToPieces(app, tetrinolist):
-    pass
 
 #moves each piece of the tetromino down by 1
 #check if it tounches the board
