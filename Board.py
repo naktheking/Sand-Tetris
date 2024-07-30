@@ -188,6 +188,11 @@ def onKeyPress(app, key):
         turnPieceShapeToCoord(app, rotatedPiece, app.tetrinoColor)
         app.rotatedTetrinoShape = rotatedPiece
 
+    if key == 'space':
+        while moveTetromino(app, 1, 0):
+            pass
+
+
 def onKeyHold(app, keys):
     if not app.paused:
         if 'down' in keys:

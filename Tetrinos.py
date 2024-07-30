@@ -79,7 +79,16 @@ def turnPieceToCoord(app, piece, color):
 def turnPieceShapeToCoord(app, pieceShape, color):
     app.rotatedTetrinoPiece = []
     lengthOfRow, lengthOfCol = len(pieceShape), len(pieceShape[0])
-    startCol = ((app.cols-lengthOfCol)//2)
+
+    centerRow = app.currRow + lengthOfRow//2
+    centerCol = app.currCol + lengthOfCol//2
+
+    newRows = len(app.rotatedTetrinoShape)
+    app.currRow = centerRow - newRows//2
+    
+    newCol = len(app.rotatedTetrinoShape[0])
+    app.currCol = centerCol - newCol//2
+
     for row in range(lengthOfRow):
         for col in range(lengthOfCol):   
             if pieceShape[row][col] == True:
@@ -88,20 +97,18 @@ def turnPieceShapeToCoord(app, pieceShape, color):
                         app.rotatedTetrinoPiece.append(((row * app.tetrinoSize + innerRow) + app.currRow, 
                                                         (col * app.tetrinoSize + innerCol) + app.currCol, 
                                                         color))
-    if checkRotateCondition(app, row, col):
-        app.tetrinoPiece =  app.rotatedTetrinoPiece
-    
+    if checkRotateCondition(app):
+        app.rotatedTetrinoShape = pieceShape
+        app.tetrinoPiece =  app.rotatedTetrinoPiece    
     app.isSandMoving = True
 
-
-def checkRotateCondition(app, row, col):
+def checkRotateCondition(app):
     for row, col, _ in app.rotatedTetrinoPiece:
-        if (0 > row > app.rows or 
-            0 > col > app.cols or 
+        if (0 > row or row > app.rows or 
+            0 > col or col > app.cols or 
             (row, col) in app.board):
-            return False
+                return False
     return True
-
 
 
 
@@ -145,13 +152,16 @@ def moveTetromino(app, drow, dcol):
         app.currCol += dcol
     app.tetrinoPiece = newTetrinoPiece
 
+
     if tetrominoContact(app, app.tetrinoPiece):
         for row, col, color in app.tetrinoPiece:
             app.board[(row, col)] = color
         app.tetrinoPiece = []
         getNewTetromino(app)
         checkGameOver(app)
-
+        return False
+    else:
+        return True
 
 #code copied from previous Tetris assignment on csacademy
 def rotate2dListClockwise(L):
