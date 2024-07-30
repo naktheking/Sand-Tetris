@@ -19,7 +19,7 @@ def onAppStart(app):
     pausedScreenInformation(app)
     endScreenInformation(app)
 def boardInformations(app):
-    app.cols = 10
+    app.cols = 40
     app.rows = 2*app.cols
     app.boardWidth = app.width/2
     app.boardHeight = app.height-20
@@ -93,7 +93,7 @@ def drawPausedScreen(app):
 
     drawRect(0, 0, app.width, app.height, fill = gray, opacity = 50)
     
-    drawLabel('PAUSED',app.width/2, app.height/5, size = 24)
+    drawLabel('PAUSED',app.width/2, app.height/5, size = 24, fill='white')
 
     drawRect(app.width/2, 2*app.height/5, 120, 50, align = 'center', fill = peru)
     drawLabel('RESUME', app.width/2, 2*app.height/5, bold = True, font='monospace', 
