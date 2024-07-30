@@ -53,7 +53,9 @@ def tetrominoContact(app, tetrominoCoords):
 #then scale it proportion to the board and add it to the app.tetrino list
 def getNewTetromino(app):
     piece, color = getNextPiece()
-    turnPieceToCoord(app, piece, color)
+    app.rotatedTetrinoShape = piece.shape
+    app.tetrinoColor = color
+    turnPieceToCoord(app, piece, app.tetrinoColor)
 
 def turnPieceToCoord(app, piece, color):
     startCol = ((app.cols-piece.getLengthOfCol())//2)
@@ -65,6 +67,46 @@ def turnPieceToCoord(app, piece, color):
                         for innerCol in range(app.tetrinoSize):
                             app.tetrinoPiece.append(((row * app.tetrinoSize + innerRow), (col * app.tetrinoSize + innerCol + startCol), color))
     app.isSandMoving = True
+
+
+
+
+
+
+def turnPieceShapeToCoord(app, pieceShape, color):
+    app.rotatedTetrinoPiece = []
+    lengthOfRow, lengthOfCol = len(pieceShape), len(pieceShape[0])
+    startCol = ((app.cols-lengthOfCol)//2)
+
+    print(pieceShape)
+    for row in range(lengthOfRow):
+        for col in range(lengthOfCol):   
+            if pieceShape[row][col] == True:
+                for innerRow in range(app.tetrinoSize):
+                    for innerCol in range(app.tetrinoSize):
+                        app.rotatedTetrinoPiece.append(((row * app.tetrinoSize + innerRow), (col * app.tetrinoSize + innerCol + startCol), color))
+    if checkRotateCondition(app, row, col):
+        app.tetrinoPiece =  app.rotatedTetrinoPiece
+    
+    app.isSandMoving = True
+
+
+def checkRotateCondition(app, row, col):
+    for row, col, _ in app.rotatedTetrinoPiece:
+        if (0 > row > app.rows or 
+            0 > col > app.cols or 
+            (row, col) in app.board):
+            return False
+    return True
+    # if row > lengthOfRow or col > lengthOfCol:
+    #     return False
+    # return app.rotatedTetrinoShape[row][col]
+
+
+
+
+
+
 
 
 #moves each piece of the tetromino down by 1

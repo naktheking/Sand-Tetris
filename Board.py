@@ -38,6 +38,10 @@ def tetrinoInformations(app):
     app.tetrinoPiece = []
     app.tetrinoColor = 'red'
     app.tetrinoStepsPerSecond = 0
+    #The small version of rotated Tetrino; not adjusted for size of board
+    app.rotatedTetrinoShape = []
+    #Expanded rotated Tetrino; adjusted for board size
+    app.rotatedTetrinoPiece = []
 def gravityInformation(app):
     #check if the blocks are moving
     app.isSandMoving = False
@@ -144,14 +148,6 @@ def resetGame(app):
 
 #Event Handlers
 
-# def onMouseMove(app, mouseX, mouseY):
-#     if (app.resumeLeftCoord < mouseX < app.resumeWidth + app.resumeLeftCoord and 
-#         app.resumeTopCoord < mouseY < app.resumeTopCoord + app.resumeHeight):
-#         app.paused = not app.paused
-#     if (app.newGameLeftCoord < mouseX < app.newGameLeftCoord + app.newGameWidth and 
-#         app.newGameTopCoord < mouseY < app.newGameTopCoord + app.newGameHeight):
-#         resetGame(app)
-
 def onMousePress(app, mouseX, mouseY):
     if app.gameOver:
         if (app.newGameLeft < mouseX < app.newGameLeft+app.newGameWidth and 
@@ -186,7 +182,11 @@ def onKeyPress(app, key):
         app.tetrinoColor = TetrinoColors[3]
 
     if key == 'up':
-        pass
+        rotatedPiece = rotate2dListClockwise(app.rotatedTetrinoShape)
+        turnPieceShapeToCoord(app, rotatedPiece, app.tetrinoColor)
+        app.rotatedTetrinoShape = rotatedPiece
+
+
 def onKeyHold(app, keys):
     if not app.paused:
         if 'down' in keys:
@@ -199,12 +199,14 @@ def onKeyHold(app, keys):
             moveTetromino(app, 0, 1)
 
 def onStep(app):
+    print(app.rotatedTetrinoShape)
     #if sand is not moving, no need to move it down; Saves time for checking
     if not app.paused:
         #move row down 1 row and 0 col
         moveTetromino(app, 1, 0)
         moveSandsDown(app)
-        checkAndClearConnectedRows(app)
+        if not app.isSandMoving:
+            checkAndClearConnectedRows(app)
 
 def redrawAll(app):
     drawBackground(app)
