@@ -47,6 +47,7 @@ TetrinoColors = ['red' , 'green', 'blue']
 def tetrominoContact(app, tetrominoCoords):
     for row, col, _ in tetrominoCoords:
         if ((row+1, col) in app.board) or (row == app.rows-1):
+            app.gravityStepsPerSecond = 0
             return True
     return False
 
@@ -147,7 +148,6 @@ def moveTetromino(app, drow, dcol):
         app.currRow += drow
         app.currCol += dcol
     app.tetrinoPiece = newTetrinoPiece
-
 
     if tetrominoContact(app, app.tetrinoPiece):
         for row, col, color in app.tetrinoPiece:

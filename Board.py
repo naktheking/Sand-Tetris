@@ -7,7 +7,6 @@ from StartScreen import *
 from aboutScreen import *
 
 
-
 #Informations and modules
 def game_onAppStart(app):
     #Changing graphic display settings
@@ -15,6 +14,7 @@ def game_onAppStart(app):
     app.stepsPerSecond = 20
     app.width = 700
     app.height = 700
+
     boardInformations(app)
     tetrinoInformations(app)
     gravityInformation(app)
@@ -25,42 +25,53 @@ def game_onAppStart(app):
     getNewTetromino(app)
 
 def boardInformations(app):
+    #Rows and Cols
     app.cols = 40
     app.rows = 2*app.cols
+
+    #Board dimensions
     app.boardWidth = app.width/2
     app.boardHeight = app.height-20
     app.leftBoardCoordinate = app.width//2-(7*app.boardWidth//10)
     app.topBoardCoordinate = app.height//2-(app.boardHeight//2)
-    app.cellWidth = app.boardWidth/app.cols
-    app.cellHeight = app.boardHeight/app.rows
-    app.board = {}
     app.borderWidth = 0.5
 
+    
+    #Cell dimensions
+    app.cellWidth = app.boardWidth/app.cols
+    app.cellHeight = app.boardHeight/app.rows
+    
+    #Board
+    app.board = {}
+
 def tetrinoInformations(app):
+    #Tetrino size adjusted for number of columns
     app.tetrinoSize = app.cols//10
-    #stores each coordinates of the tetrino pieces as (row, col, color)
-    #only 1 tetrino at a time
+
+    #Current tetrino piece as (row, col, color)
     app.tetrinoPiece = []
     app.tetrinoColor = 'red'
-    #The small version of rotated Tetrino; not adjusted for size of board
+    
+    #Temporary tetrino for rotation
     app.rotatedTetrinoShape = []
-    #Expanded rotated Tetrino; adjusted for board size
     app.rotatedTetrinoPiece = []
 
-    #current location 
+    #current tetrino location 
     app.currRow = 0
     app.currCol = 0
 
 def gravityInformation(app):
-    #check if the blocks are moving
     app.isSandMoving = False
+
+    #To limit number of times of checking connected rows
     app.gravityStepsPerSecond = 0
 
 def sandInformation(app):
+    #For sands to fall slower with frictioin
     app.sandStepsPerSecond = 0
 
 def gameInformation(app):
-    #game score and level
+    #Game scores and levels
     app.score = 0
     app.level = 1
     app.linesCleared = 0
@@ -98,8 +109,11 @@ def pausedScreenInformation(app):
     app.musicHeight = 30
 
 def endScreenInformation(app):
+    #Game Over text
     app.gameOverXCoordEnd = (app.boardWidth/2+app.leftBoardCoordinate)
     app.gameOverYCoordEnd = app.boardHeight/4+app.topBoardCoordinate
+
+    #New Game Button
     app.newGameYCoordEnd = 3*app.boardHeight/4+app.topBoardCoordinate
     app.newGameWidthEnd = 180
     app.newGameHeightEnd = 40
@@ -131,10 +145,12 @@ def drawBackground(app):
     drawRect(0, 0, app.width, app.height, fill = 'black')
 
 def drawPausedScreen(app):
+    #Colors
     peru = rgb(205, 133, 63)
     chocolate = rgb(210, 105, 30)
     gray = rgb(43, 43, 40)
 
+    #Faded background
     drawRect(app.leftBoardCoordinate, app.topBoardCoordinate, app.boardWidth, 
              app.boardHeight, fill = gray, opacity = 90)
     #Paused Text
@@ -159,47 +175,48 @@ def drawPausedScreen(app):
               font='monospace', size = 24)
     
     #Music Button
-    drawRect(app.musicXCoord, app.musicYCoord, app.musicWidth, app.musicHeight,
-             align = 'center', fill = None, border = 'white')
     drawLabel('MUSIC', app.musicXCoord, app.musicYCoord, fill = 'white')
     if not app.music:
         drawLine(app.musicXCoord - app.musicWidth/2, app.musicYCoord + app.musicHeight/2,
                  app.musicXCoord + app.musicWidth/2, app.musicYCoord - app.musicHeight/2,
                  fill = 'red')
+    drawRect(app.musicXCoord, app.musicYCoord, app.musicWidth, app.musicHeight,
+             align = 'center', fill = None, border = 'white')
 
 def drawEndScreen(app):
+    #Faded Background
     drawRect(app.leftBoardCoordinate, app.topBoardCoordinate, app.boardWidth, 
              app.boardHeight, fill = 'black', opacity = 40)
 
+    #Game Over Text
     drawLabel('GAME OVER', app.gameOverXCoordEnd, 
               app.gameOverYCoordEnd, bold = True, 
               font='monospace', size = 30, fill = 'white')
 
-
+    #New Game Button
     drawRect(app.gameOverXCoordEnd, app.newGameYCoordEnd, app.newGameWidthEnd, 
              app.newGameHeightEnd, align = 'center', fill = 'white')
-    
     drawLabel('New Game', app.gameOverXCoordEnd, app.newGameYCoordEnd, bold = True, 
                font='orbitron', size = 30)
 
 def drawScore(app):
+    #Scores
     drawLabel(f'Score: {app.score}', 4*app.width/5, 13*app.width/70, fill = 'white',
               size = 24, bold = True)
 
 def drawLevel(app):
-    drawLabel(f'Level: {app.level}', 4*app.width/5, 3*app.height/7, fill = 'white',
+    #Levels
+    drawLabel(f'Level: {app.level}', 4*app.width/5, 30*app.height/70, fill = 'white',
               size = 24, bold = True)
 
-
-
+def drawLinesCleared(app):
+    #Lines
+    drawLabel(f'Lines: {app.linesCleared}', 4*app.width/5, 47*app.height/70, fill = 'white',
+              size = 24, bold = True)
 
 #Functions
-def createSand(app, row, col):
-    if app.board.get((row,col)) == None:
-        app.isSandMoving = True
-        app.board[(row, col)] = app.tetrinoColor
-
 def coordToRowAndCol(app, x, y):
+    #Turn pixel coordinates into the cell it's in
     row = int((y-app.topBoardCoordinate)/app.cellHeight)
     col = int((x-app.leftBoardCoordinate)/app.cellWidth)
     return row, col
@@ -245,24 +262,9 @@ def game_onMousePress(app, mouseX, mouseY):
               ((app.musicYCoord - app.musicHeight/2) < mouseY < (app.musicYCoord + app.musicHeight/2))):
             app.music = not app.music
 
-def game_onMouseDrag(app, mouseX, mouseY):
-    row, col = coordToRowAndCol(app, mouseX, mouseY)
-    createSand(app, row, col)
-
 def game_onKeyPress(app, key):
-    if key == 's':
-        getNewTetromino(app)
-    elif key == 'p':
+    if key == 'p':
         app.paused = not app.paused
-
-    if key == '0':
-        app.tetrinoColor = TetrinoColors[0]
-    elif key == '1':
-        app.tetrinoColor = TetrinoColors[1]
-    elif key == '2':
-        app.tetrinoColor = TetrinoColors[2]
-    elif key == '3':
-        app.tetrinoColor = TetrinoColors[3]
 
     if key == 'up':
         rotatedPiece = rotate2dListClockwise(app.rotatedTetrinoShape)
@@ -290,10 +292,8 @@ def game_onStep(app):
         #lower the rate of checking connected rows so program can be faster 
         #formula divides by tetrino size; checks rows when there are no gaps between blocks
         app.gravityStepsPerSecond += 1
-        if app.gravityStepsPerSecond%(2*app.tetrinoSize)==0:
-            # if not app.isSandMoving:
+        if app.gravityStepsPerSecond%(2 * app.tetrinoSize) == 0:
             checkAndClearConnectedRows(app)
-            #move row down 1 row and 0 col
         moveSandsDown(app)
         moveTetromino(app, 1, 0)
     #level increases by 1 every 10 seconds
@@ -305,6 +305,7 @@ def game_redrawAll(app):
     drawBackground(app)
     drawScore(app)
     drawLevel(app)
+    drawLinesCleared(app)
     drawTetromino(app)
     drawBoard(app)
     if app.gameOver:

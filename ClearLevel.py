@@ -6,18 +6,26 @@ from playsound import playsound
 #key: row     value: color
 def findAllColorGroupOnLeft(app):
     allPixelColorOnLeft = {}
+    #go through each cell on the left side
     for i in range(app.rows-1, -1, -1):
+        #if it is None, the every cell above it would be empty too
         if (i,0) not in app.board:
             break
+
+        #Gets the top cell of each color groups
         else:
             currentColor = app.board[(i, 0)]
+
         if currentColor == None:
             break
+
         else:
             if (i-1, 0) in app.board and app.board[(i-1, 0)] == currentColor:
                 continue
+
             else:
                 allPixelColorOnLeft[i] = currentColor
+
     return allPixelColorOnLeft 
 
 #DFS with stack learned from Lauren Sands
@@ -27,14 +35,20 @@ def checkLevelConnected(app, row, col, color):
     cellsToExplore = [(row, col)]
     #if the cell is already in cells to explore, no need to add it again and check it again
     #checking if the cell already in the explore list is faster when a set of same elements exist
+    
     cellsToExploreSet = set((row,col))
     directions = [(0, -1), (-1, 0), (1, 0), (0, 1)]
-
+    
+    #keeps exploreing until reach the other side
     while cellsToExplore != []:
+       
+        #use the last cell to keep exploring
         currRow, currCol = cellsToExplore.pop()
         if currCol == app.cols-1:
             return True
+       
         #check around the cell if any is same color and not in filled Cell
+        #if it is, added to the explore list
         for direction in directions:
             newRow = currRow + direction[0]
             newCol = currCol + direction[1]
@@ -51,6 +65,7 @@ def clearLevel(app, row, col, color):
         return
     playsound(app.clearLevelSound, False)
     app.linesCleared += 1
+    #go through the set of connected pixels and remove them from dictionary
     pixelsToClear = clearLevelHelper(app, row, col, color)
     app.score += len(pixelsToClear)
     for (row,col) in pixelsToClear:
@@ -65,17 +80,21 @@ def clearLevelHelper(app, row, col, color):
     #checking if the cell already in the explore list is faster when a set of same elements exist
     cellsToExploreSet = set((row,col))
     directions = [(0 ,1), (1, 0), (-1, 0), (0, -1)]
+
     while cellsToExplore != []:
         currRow, currCol = cellsToExplore.pop(0)
         #check around the cell if any is same color and not in filled Cell
         filledCells.add((currRow, currCol))
+
         for direction in directions:
             newRow = currRow + direction[0]
             newCol = currCol + direction[1]
+            
             if ((isOnBoard(app, newRow, newCol)) and 
             ((newRow, newCol) not in filledCells) and 
             (app.board.get((newRow, newCol), None) == color) and
             ((newRow, newCol) not in cellsToExploreSet)):
+                
                 cellsToExplore.append((newRow, newCol))
                 cellsToExploreSet.add((newRow, newCol))
     return filledCells
@@ -83,6 +102,7 @@ def clearLevelHelper(app, row, col, color):
 def isOnBoard(app, nextRow, nextCol):
     return (0 <= nextRow < app.rows) and (0 <= nextCol < app.cols)
 
+#combines the check and clear function to call easier in Board.py
 def checkAndClearConnectedRows(app):
     levelsToClear = []
     #checking each color groups if they're connected

@@ -21,22 +21,26 @@ def about_redrawAll(app):
     drawLabel('Controls', app.width/2, 6*app.height/20, fill = 'white', 
                size = 20)
     
+    
     #Move Right
     drawLabel('Move Left/Right', app.width/4, 8*app.height/20, fill = 'white', 
                size = 17, align = 'left')
     drawLabel('Left/Right Arrow key', (2*app.width/4)+60, 8*app.height/20, fill = 'white', 
                size = 17, align = 'left')
+    
     #Move Down
     drawLabel('Move Down', app.width/4, 9*app.height/20, fill = 'white', 
                size = 17, align = 'left')
     drawLabel('Down-Arrow', (2*app.width/4)+60, 9*app.height/20, fill = 'white', 
                size = 17, align = 'left')
-
+    
+    #Instant Down
     drawLabel('Instant Down', app.width/4, 10*app.height/20, fill = 'white', 
                size = 17, align = 'left')
     drawLabel('Space Bar', (2*app.width/4)+60, 10*app.height/20, fill = 'white', 
                size = 17, align = 'left')
 
+    #Pause/unpause
     drawLabel('Pause/unpause', app.width/4, 11*app.height/20, fill = 'white', 
                size = 17, align = 'left')
     drawLabel('p', (2*app.width/4)+60, 11*app.height/20, fill = 'white', 

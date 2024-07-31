@@ -8,6 +8,7 @@ def redrawAll(app):
     chocolate = rgb(210, 105, 30)
     gray = rgb(43, 43, 40)
 
+
     drawRect(app.leftBoardCoordinate, app.topBoardCoordinate, app.boardWidth, 
              app.boardHeight, fill = gray, opacity = 70)
     #Paused Text
