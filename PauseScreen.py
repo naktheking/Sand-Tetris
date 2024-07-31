@@ -1,23 +1,37 @@
 from cmu_graphics import *
+def onAppStart(app):
+    app.width = app.height = 700
+
 
 def redrawAll(app):
     peru = rgb(205, 133, 63)
     chocolate = rgb(210, 105, 30)
     gray = rgb(43, 43, 40)
 
+    drawRect(app.leftBoardCoordinate, app.topBoardCoordinate, app.boardWidth, 
+             app.boardHeight, fill = gray, opacity = 70)
+    #Paused Text
+    drawLabel('PAUSED',app.boardWidth/2 + app.leftBoardCoordinate, 
+              app.boardHeight/4 + app.topBoardCoordinate, size = 24, 
+              fill='white')
 
-    drawRect(0, 0, app.width, app.height, fill = gray, opacity = 50)
+    #Resume Button
+    drawRect(app.resumeXCoord, 
+             app.resumeYCoord, app.resumeWidth, app.resumeHeight, 
+             align = 'center', fill = peru)
+    drawLabel('RESUME', app.resumeXCoord,
+               app.resumeYCoord, bold = True, 
+               font='monospace', size = 24)
     
-    drawLabel('PAUSED',app.width/2, app.height/5, size = 24)
-
-    drawRect(app.width/2, 2*app.height/5, 120, 50, align = 'center', fill = peru)
-    drawLabel('RESUME', app.width/2, 2*app.height/5, bold = True, font='monospace', 
-               size = 24)
+    #New Game Button
+    drawRect(app.newGameXCoord, 
+             app.newGameYCoord,app.newGameWidth, app.newGameHeight, 
+             align = 'center', fill = chocolate)
+    drawLabel('NEW GAME', app.newGameXCoord, 
+              app.newGameYCoord, bold = True, 
+              font='monospace', size = 24)
     
-
-    drawRect(app.width/2, 3*app.height/5, 150, 50, align = 'center', fill = chocolate)
-    drawLabel('NEW GAME', app.width/2, 3*app.height/5, bold = True, font='monospace', 
-               size = 24)
+    #Music Button
     
 
 def main():

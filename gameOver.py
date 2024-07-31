@@ -9,7 +9,7 @@ def redrawAll(app):
 
 
     drawRect(app.width/2, 3*app.height/5, 150, 40, align = 'center', fill = 'white')
-    drawLabel('New Game', app.width/2, 3*app.height/5, bold = True, font='orbitron',
+    drawLabel('New Game', app.width/2, 3*app.height/5, bold = True, font='sacramento',
                size = 24)
 
 def main():

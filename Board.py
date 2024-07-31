@@ -3,11 +3,12 @@ from Gravity import *
 from Tetrinos import *
 from ClearLevel import *
 from gameStatus import *
+from StartScreen import *
 
 
 
 #Informations and modules
-def onAppStart(app):
+def game_onAppStart(app):
     #Changing graphic display settings
     app.setMaxShapeCount(30000)
     app.stepsPerSecond = 20
@@ -20,6 +21,7 @@ def onAppStart(app):
     pausedScreenInformation(app)
     endScreenInformation(app)
     sandInformation(app)
+
 def boardInformations(app):
     app.cols = 40
     app.rows = 2*app.cols
@@ -31,6 +33,7 @@ def boardInformations(app):
     app.cellHeight = app.boardHeight/app.rows
     app.board = {}
     app.borderWidth = 0.5
+
 def tetrinoInformations(app):
     app.tetrinoSize = app.cols//10
     #stores each coordinates of the tetrino pieces as (row, col, color)
@@ -45,16 +48,20 @@ def tetrinoInformations(app):
     #current location 
     app.currRow = 0
     app.currCol = 0
+
 def gravityInformation(app):
     #check if the blocks are moving
     app.isSandMoving = False
     app.gravityStepsPerSecond = 0
+
 def sandInformation(app):
     app.sandStepsPerSecond = 0
+
 def gameInformation(app):
     #game score and level
     app.score = 0
     app.level = 1
+    app.linesCleared = 0
     app.highestScore = 0
     app.levelTimesPerSecond = 0
     
@@ -63,23 +70,36 @@ def gameInformation(app):
     app.gameOver = True
     
     #sounds
-    # sandCreedRd = 'SandCreekRd.m4a'
-    # sussy = 'sussy.m4a'
-    # app.clearLevelSound = sandCreedRd
-    # app.gameOverSound = sussy
-def pausedScreenInformation(app):
-    app.resumeLeftCoord = 290
-    app.resumeTopCoord = 247
-    app.resumeWidth = 120
-    app.resumeHeight = 40
+    sandCreedRd = 'SandCreekRd.m4a'
+    sussy = 'sussy.m4a'
+    app.clearLevelSound = sandCreedRd
+    app.gameOverSound = sussy
+    app.music = True
 
-    app.newGameLeftCoord = 275
-    app.newGameTopCoord = 383
-    app.newGameWidth = 150
-    app.newGameHeight = 40
+def pausedScreenInformation(app):
+    #Resume button informations
+    app.resumeXCoord = app.boardWidth/2 + app.leftBoardCoordinate
+    app.resumeYCoord = 2*app.boardHeight/5 + app.topBoardCoordinate
+    app.resumeWidth = 120
+    app.resumeHeight = 50
+
+    #New Game button informations
+    app.newGameXCoord = app.boardWidth/2 + app.leftBoardCoordinate
+    app.newGameYCoord = 3*app.boardHeight/5 + app.topBoardCoordinate
+    app.newGameWidth = 120
+    app.newGameHeight = 50
+
+    #Music button infromations
+    app.musicXCoord = 4*app.boardWidth/5 + app.leftBoardCoordinate
+    app.musicYCoord = app.boardHeight/10 + app.topBoardCoordinate
+    app.musicWidth = 70
+    app.musicHeight = 30
+
 def endScreenInformation(app):
     app.newGameLeft, app.newGameTop = 250, 398
     app.newGameWidth, app.newGameHeight = 200, 40
+
+
 
 
 #Drawing
@@ -111,21 +131,41 @@ def drawPausedScreen(app):
     chocolate = rgb(210, 105, 30)
     gray = rgb(43, 43, 40)
 
-    drawRect(0, 0, app.width, app.height, fill = gray, opacity = 50)
-    
-    drawLabel('PAUSED',app.width/2, app.height/5, size = 24, fill='white')
+    drawRect(app.leftBoardCoordinate, app.topBoardCoordinate, app.boardWidth, 
+             app.boardHeight, fill = gray, opacity = 90)
+    #Paused Text
+    drawLabel('PAUSED', app.boardWidth/2 + app.leftBoardCoordinate, 
+              app.boardHeight/4 + app.topBoardCoordinate, size = 24, 
+              fill='white')
 
-    drawRect(app.width/2, 2*app.height/5, 120, 50, align = 'center', fill = peru)
-    drawLabel('RESUME', app.width/2, 2*app.height/5, bold = True, font='monospace', 
-               size = 24)
+    #Resume Button
+    drawRect(app.resumeXCoord, 
+             app.resumeYCoord, app.resumeWidth, app.resumeHeight, 
+             align = 'center', fill = peru)
+    drawLabel('RESUME', app.resumeXCoord,
+               app.resumeYCoord, bold = True, 
+               font='monospace', size = 24)
     
-    drawRect(app.width/2, 3*app.height/5, 150, 50, align = 'center', fill = chocolate)
-    drawLabel('NEW GAME', app.width/2, 3*app.height/5, bold = True, font='monospace', 
-               size = 24)
+    #New Game Button
+    drawRect(app.newGameXCoord, 
+             app.newGameYCoord, app.newGameWidth, app.newGameHeight, 
+             align = 'center', fill = chocolate)
+    drawLabel('NEW GAME', app.newGameXCoord, 
+              app.newGameYCoord, bold = True, 
+              font='monospace', size = 24)
+    
+    #Music Button
+    drawRect(app.musicXCoord, app.musicYCoord, app.musicWidth, app.musicHeight,
+             align = 'center', fill = None, border = 'white')
+    drawLabel('MUSIC', app.musicXCoord, app.musicYCoord, fill = 'white')
+    if not app.music:
+        drawLine(app.musicXCoord - app.musicWidth/2, app.musicYCoord + app.musicHeight/2,
+                 app.musicXCoord + app.musicWidth/2, app.musicYCoord - app.musicHeight/2,
+                 fill = 'red')
 
 def drawEndScreen(app):
     drawRect(app.leftBoardCoordinate, app.topBoardCoordinate, app.boardWidth, 
-             app.boardHeight, fill = 'black', opacity = 70)
+             app.boardHeight, fill = 'black', opacity = 90)
 
     drawLabel('GAME OVER', app.boardWidth/2+app.leftBoardCoordinate, 
               app.boardHeight/4+app.topBoardCoordinate, bold = True, 
@@ -148,8 +188,9 @@ def drawLevel(app):
               size = 24, bold = True)
 
 
-#Functions
 
+
+#Functions
 def createSand(app, row, col):
     if app.board.get((row,col)) == None:
         app.isSandMoving = True
@@ -173,27 +214,35 @@ def resetGame(app):
 
 
 
-#Event Handlers
 
-def onMousePress(app, mouseX, mouseY):
+#Event Handlers
+def game_onMousePress(app, mouseX, mouseY):
     if app.gameOver:
         if (app.newGameLeft < mouseX < app.newGameLeft+app.newGameWidth and 
             app.newGameTop < mouseY < app.newGameTop+app.newGameHeight):
             resetGame(app)
     
     if app.paused and not app.gameOver:
-        if (app.resumeLeftCoord < mouseX < app.resumeWidth + app.resumeLeftCoord and 
-            app.resumeTopCoord < mouseY < app.resumeTopCoord + app.resumeHeight):
+        #Mouse in paused button
+        if ((app.resumeXCoord - app.resumeWidth/2) < mouseX < (app.resumeWidth/2 + app.resumeXCoord) and 
+            (app.resumeYCoord - app. resumeHeight/2) < mouseY < (app.resumeYCoord + app.resumeHeight/2)):
             app.paused = not app.paused
-        if (app.newGameLeftCoord < mouseX < app.newGameLeftCoord + app.newGameWidth and 
-            app.newGameTopCoord < mouseY < app.newGameTopCoord + app.newGameHeight):
+        
+        #Mouse in new game button
+        elif ((app.newGameXCoord - app.newGameWidth/2) < mouseX < (app.newGameXCoord + app.newGameWidth/2) and 
+            (app.newGameYCoord - app.newGameHeight/2) < mouseY < (app.newGameYCoord + app.newGameHeight/2)):
             resetGame(app)
 
-def onMouseDrag(app, mouseX, mouseY):
+        #mouse in music button
+        elif (((app.musicXCoord - app.musicWidth) < mouseX < (app.musicXCoord + app.musicWidth/2)) and 
+              ((app.musicYCoord - app.musicHeight/2) < mouseY < (app.musicYCoord + app.musicHeight/2))):
+            app.music = not app.music
+
+def game_onMouseDrag(app, mouseX, mouseY):
     row, col = coordToRowAndCol(app, mouseX, mouseY)
     createSand(app, row, col)
 
-def onKeyPress(app, key):
+def game_onKeyPress(app, key):
     if key == 's':
         getNewTetromino(app)
     elif key == 'p':
@@ -217,7 +266,7 @@ def onKeyPress(app, key):
         while moveTetromino(app, 1, 0):
             pass
 
-def onKeyHold(app, keys):
+def game_onKeyHold(app, keys):
     if not app.paused:
         if 'down' in keys:
             app.score += 1
@@ -229,10 +278,10 @@ def onKeyHold(app, keys):
         if 'right' in keys:
             moveTetromino(app, 0, 1)
 
-def onStep(app):
+def game_onStep(app):    
     if not app.paused:
         #lower the rate of checking connected rows so program can be faster 
-        #formula divides by tetrino size so it checks it when there are no gaps between blocks
+        #formula divides by tetrino size; checks rows when there are no gaps between blocks
         app.gravityStepsPerSecond += 1
         if app.gravityStepsPerSecond%2*app.tetrinoSize==0:
             # if not app.isSandMoving:
@@ -240,13 +289,12 @@ def onStep(app):
             #move row down 1 row and 0 col
         moveSandsDown(app)
         moveTetromino(app, 1, 0)
-
     #level increases by 1 every 10 seconds
     app.levelTimesPerSecond += 1
     if app.levelTimesPerSecond % (app.stepsPerSecond*10) == 0 and not app.paused:
         app.level+=1
 
-def redrawAll(app):
+def game_redrawAll(app):
     drawBackground(app)
     drawScore(app)
     drawLevel(app)
@@ -258,5 +306,5 @@ def redrawAll(app):
         drawPausedScreen(app)
 
 def main():
-    runApp()
+    runAppWithScreens(initialScreen='startScreen')
 main()

@@ -51,12 +51,8 @@ def checkLevelConnected(app, row, col, color):
 def clearLevel(app, row, col, color):
     if row == None:
         return
-    
-    
-    # playsound(app.clearLevelSound)
-
-
-
+    playsound(app.clearLevelSound, False)
+    app.linesCleared += 1
     pixelsToClear = clearLevelHelper(app, row, col, color)
     app.score += len(pixelsToClear)
     for (row,col) in pixelsToClear:
