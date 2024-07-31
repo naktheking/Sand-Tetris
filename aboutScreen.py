@@ -10,7 +10,7 @@ def about_onAppStart(app):
     app.topBoardCoordinate = app.height//2-(app.boardHeight//2)
     app.music = False
 
-    app.homeButtonImage = CMUImage(Image.open('pngegg.png'))
+    app.homeButtonImage = CMUImage(Image.open('homeButton.png'))
 
 def about_redrawAll(app):
     drawRect(0, 0, app.width, app.height, fill = 'black')
@@ -62,7 +62,7 @@ def about_redrawAll(app):
                size = 17, align = 'left')
     
     #BGM
-    drawLabel('Background Music', app.width/4, 16*app.height/20, fill = 'white', 
+    drawLabel('Background Music:', app.width/4, 16*app.height/20, fill = 'white', 
                size = 17, align = 'left')
     drawLabel('King Wang', (2*app.width/4)+60, 16*app.height/20, fill = 'white', 
                size = 17, align = 'left')
