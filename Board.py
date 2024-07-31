@@ -18,6 +18,7 @@ def onAppStart(app):
     gameInformation(app)
     pausedScreenInformation(app)
     endScreenInformation(app)
+    sandInformation(app)
 def boardInformations(app):
     app.cols = 40
     app.rows = 2*app.cols
@@ -37,7 +38,6 @@ def tetrinoInformations(app):
     #only 1 tetrino at a time
     app.tetrinoPiece = []
     app.tetrinoColor = 'red'
-    app.tetrinoStepsPerSecond = 0
     #The small version of rotated Tetrino; not adjusted for size of board
     app.rotatedTetrinoShape = []
     #Expanded rotated Tetrino; adjusted for board size
@@ -50,11 +50,20 @@ def gravityInformation(app):
     #check if the blocks are moving
     app.isSandMoving = False
     app.gravityStepsPerSecond = 0
+def sandInformation(app):
+    app.sandStepsPerSecond = 0
 def gameInformation(app):
+    #game score and level
     app.score = 0
+    app.level = 1
     app.highestScore = 0
+    app.levelTimesPerSecond = 0
+    
+    #game status
     app.paused = False
     app.gameOver = False
+    
+    #sounds
     # sandCreedRd = 'SandCreekRd.m4a'
     # sussy = 'syssy.m4a'
     # app.clearLevelSound = Sound(sandCreedRd)
@@ -72,7 +81,6 @@ def pausedScreenInformation(app):
 def endScreenInformation(app):
     app.newGameLeft, app.newGameTop = 250, 398
     app.newGameWidth, app.newGameHeight = 200, 40
-
 
 
 #Drawing
@@ -135,6 +143,11 @@ def drawScore(app):
     drawLabel(f'Score: {app.score}', 4*app.width/5, 13*app.width/70, fill = 'white',
               size = 24, bold = True)
 
+def drawLevel(app):
+    drawLabel(f'Level: {app.level}', 4*app.width/5, 3*app.height/7, fill = 'white',
+              size = 24, bold = True)
+
+
 #Functions
 
 def createSand(app, row, col):
@@ -153,6 +166,7 @@ def resetGame(app):
     if app.score > app.highestScore:
         app.highestScore = app.score
     app.score = 0
+    app.level = 0
     app.paused = False
     app.gameOver = False
     getNewTetromino(app)
@@ -203,7 +217,6 @@ def onKeyPress(app, key):
         while moveTetromino(app, 1, 0):
             pass
 
-
 def onKeyHold(app, keys):
     if not app.paused:
         if 'down' in keys:
@@ -219,16 +232,23 @@ def onKeyHold(app, keys):
 def onStep(app):
     #if sand is not moving, no need to move it down; Saves time for checking
     if not app.paused:
-        #move row down 1 row and 0 col
-        moveTetromino(app, 1, 0)
-        moveSandsDown(app)
-        if not app.isSandMoving:
+        app.gravityStepsPerSecond += 1
+        if app.gravityStepsPerSecond%app.tetrinoSize==0:
+            # if not app.isSandMoving:
             checkAndClearConnectedRows(app)
+            #move row down 1 row and 0 col
+        moveSandsDown(app)
+        moveTetromino(app, 1, 0)
+
+    #level increases by 1 every 10 seconds
+    app.levelTimesPerSecond += 1
+    if app.levelTimesPerSecond % (app.stepsPerSecond*10) == 0:
+        app.level+=1
 
 def redrawAll(app):
     drawBackground(app)
     drawScore(app)
-
+    drawLevel(app)
     drawTetromino(app)
     drawBoard(app)
     if app.gameOver:

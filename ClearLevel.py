@@ -80,15 +80,12 @@ def isOnBoard(app, nextRow, nextCol):
 
 def checkAndClearConnectedRows(app):
     levelsToClear = []
-    #slow the run speed down 10 times
-    app.gravityStepsPerSecond += 1
-    if app.gravityStepsPerSecond%10==0:
-        #checking each color groups if they're connected
-        colorGroups = findAllColorGroupOnLeft(app)
-        for row in colorGroups.keys():
-            color = colorGroups[row]
-            if checkLevelConnected(app, row, 0, color):
-                levelsToClear.append((row, color))
+    #checking each color groups if they're connected
+    colorGroups = findAllColorGroupOnLeft(app)
+    for row in colorGroups.keys():
+        color = colorGroups[row]
+        if checkLevelConnected(app, row, 0, color):
+            levelsToClear.append((row, color))
 
     #clear the connected rows
     while levelsToClear != []:

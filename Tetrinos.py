@@ -39,7 +39,7 @@ zpiece = TetrinosPieces([[True, True, False],
 # Add all pieces to a list
 allTetrinoPieces = [ipiece, jpiece, lpiece, opiece, spiece, tpiece, zpiece]
 #Tetrino colors
-TetrinoColors = ['red', 'green', 'yellow', 'blue']
+TetrinoColors = ['red', 'green', 'blue']
 
 #check if tetromino contacts with current sand blocks
 #the +1 and -1 is there becuase row and col starts at 1 but dictionary coordiantes start at 0
@@ -71,11 +71,7 @@ def turnPieceToCoord(app, piece, color):
                             app.tetrinoPiece.append(((row * app.tetrinoSize + innerRow), (col * app.tetrinoSize + innerCol + startCol), color))
     app.isSandMoving = True
 
-
-
-
-
-#given the rotated piece shape 
+#given the rotated piece shape; it rotates and expands it to match the board size
 def turnPieceShapeToCoord(app, pieceShape, color):
     app.rotatedTetrinoPiece = []
     lengthOfRow, lengthOfCol = len(pieceShape), len(pieceShape[0])
@@ -103,8 +99,7 @@ def turnPieceShapeToCoord(app, pieceShape, color):
         app.tetrinoPiece =  app.rotatedTetrinoPiece    
     app.isSandMoving = True
 
-
-
+#check if the after rotated block is out of bound or touching existing blocks
 def checkRotateCondition(app):
     for row, col, _ in app.rotatedTetrinoPiece:
         if (0 > row or row > app.rows or 
@@ -112,9 +107,6 @@ def checkRotateCondition(app):
             (row, col) in app.board):
                 return False
     return True
-
-
-
 
 #moves each piece of the tetromino down by 1
 #check if it tounches the board
