@@ -5,6 +5,7 @@ from ClearLevel import *
 from gameStatus import *
 
 
+
 #Informations and modules
 def onAppStart(app):
     #Changing graphic display settings
@@ -28,8 +29,6 @@ def boardInformations(app):
     app.topBoardCoordinate = app.height//2-(app.boardHeight//2)
     app.cellWidth = app.boardWidth/app.cols
     app.cellHeight = app.boardHeight/app.rows
-    # app.boardWithList = [[None for i in range(app.cols)] for j in range(app.rows)]
-    #app.board is a dictionary; keys are the coordinates; values are the color
     app.board = {}
     app.borderWidth = 0.5
 def tetrinoInformations(app):
@@ -61,13 +60,13 @@ def gameInformation(app):
     
     #game status
     app.paused = False
-    app.gameOver = False
+    app.gameOver = True
     
     #sounds
     # sandCreedRd = 'SandCreekRd.m4a'
-    # sussy = 'syssy.m4a'
-    # app.clearLevelSound = Sound(sandCreedRd)
-    # app.gameOverSound = Sound(sussy)
+    # sussy = 'sussy.m4a'
+    # app.clearLevelSound = sandCreedRd
+    # app.gameOverSound = sussy
 def pausedScreenInformation(app):
     app.resumeLeftCoord = 290
     app.resumeTopCoord = 247
@@ -96,8 +95,9 @@ def drawCell(app, row, col, color = None):
              border = None)
 
 def drawBoardBorder(app):
-    drawRect(app.leftBoardCoordinate, app.topBoardCoordinate, app.boardWidth, app.boardHeight,
-             fill = None, border = 'gray', borderWidth = 2*app.borderWidth)
+    drawRect(app.leftBoardCoordinate, app.topBoardCoordinate, app.boardWidth, 
+             app.boardHeight, fill = None, border = 'gray', 
+             borderWidth = 2*app.borderWidth)
 
 def drawTetromino(app):
     for row, col, color in app.tetrinoPiece:
@@ -230,10 +230,11 @@ def onKeyHold(app, keys):
             moveTetromino(app, 0, 1)
 
 def onStep(app):
-    #if sand is not moving, no need to move it down; Saves time for checking
     if not app.paused:
+        #lower the rate of checking connected rows so program can be faster 
+        #formula divides by tetrino size so it checks it when there are no gaps between blocks
         app.gravityStepsPerSecond += 1
-        if app.gravityStepsPerSecond%app.tetrinoSize==0:
+        if app.gravityStepsPerSecond%2*app.tetrinoSize==0:
             # if not app.isSandMoving:
             checkAndClearConnectedRows(app)
             #move row down 1 row and 0 col
@@ -242,7 +243,7 @@ def onStep(app):
 
     #level increases by 1 every 10 seconds
     app.levelTimesPerSecond += 1
-    if app.levelTimesPerSecond % (app.stepsPerSecond*10) == 0:
+    if app.levelTimesPerSecond % (app.stepsPerSecond*10) == 0 and not app.paused:
         app.level+=1
 
 def redrawAll(app):

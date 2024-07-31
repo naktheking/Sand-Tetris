@@ -39,7 +39,8 @@ zpiece = TetrinosPieces([[True, True, False],
 # Add all pieces to a list
 allTetrinoPieces = [ipiece, jpiece, lpiece, opiece, spiece, tpiece, zpiece]
 #Tetrino colors
-TetrinoColors = ['red', 'green', 'blue']
+TetrinoColors = ['red' , 'green', 'blue']
+
 
 #check if tetromino contacts with current sand blocks
 #the +1 and -1 is there becuase row and col starts at 1 but dictionary coordiantes start at 0

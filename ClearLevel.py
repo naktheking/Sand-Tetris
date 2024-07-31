@@ -1,3 +1,9 @@
+#Tried to use CS Academy to play sound but crashes every time
+#playsound learned from https://www.geeksforgeeks.org/play-sound-in-python/ 
+from playsound import playsound
+
+
+
 #returns a dictionary of the top of the color groups on the left side
 #key: row     value: color
 def findAllColorGroupOnLeft(app):
@@ -45,7 +51,12 @@ def checkLevelConnected(app, row, col, color):
 def clearLevel(app, row, col, color):
     if row == None:
         return
-    # app.clearLevelSound.play()
+    
+    
+    # playsound(app.clearLevelSound)
+
+
+
     pixelsToClear = clearLevelHelper(app, row, col, color)
     app.score += len(pixelsToClear)
     for (row,col) in pixelsToClear:
