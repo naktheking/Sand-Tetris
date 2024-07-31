@@ -237,6 +237,7 @@ def game_onMousePress(app, mouseX, mouseY):
         #Mouse in new game button
         elif ((app.gameOverXCoordEnd - app.gameOverXCoordEnd/2) < mouseX < (app.gameOverXCoordEnd + app.gameOverXCoordEnd/2) and 
             (app.newGameYCoord - app.newGameYCoordEnd/2) < mouseY < (app.newGameYCoordEnd + app.newGameYCoordEnd/2)):
+            setActiveScreen('startScreen')
             resetGame(app)
 
         #mouse in music button
@@ -289,7 +290,6 @@ def game_onStep(app):
         #lower the rate of checking connected rows so program can be faster 
         #formula divides by tetrino size; checks rows when there are no gaps between blocks
         app.gravityStepsPerSecond += 1
-        print(app.gravityStepsPerSecond)
         if app.gravityStepsPerSecond%(2*app.tetrinoSize)==0:
             # if not app.isSandMoving:
             checkAndClearConnectedRows(app)
