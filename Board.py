@@ -4,6 +4,7 @@ from Tetrinos import *
 from ClearLevel import *
 from gameStatus import *
 from StartScreen import *
+from aboutScreen import *
 
 
 
@@ -21,6 +22,7 @@ def game_onAppStart(app):
     pausedScreenInformation(app)
     endScreenInformation(app)
     sandInformation(app)
+    getNewTetromino(app)
 
 def boardInformations(app):
     app.cols = 40
@@ -67,7 +69,7 @@ def gameInformation(app):
     
     #game status
     app.paused = False
-    app.gameOver = True
+    app.gameOver = False
     
     #sounds
     sandCreedRd = 'SandCreekRd.m4a'
@@ -86,8 +88,8 @@ def pausedScreenInformation(app):
     #New Game button informations
     app.newGameXCoord = app.boardWidth/2 + app.leftBoardCoordinate
     app.newGameYCoord = 3*app.boardHeight/5 + app.topBoardCoordinate
-    app.newGameWidth = 120
-    app.newGameHeight = 50
+    app.newGameWidthPaused = 180
+    app.newGameHeightPaused = 40
 
     #Music button infromations
     app.musicXCoord = 4*app.boardWidth/5 + app.leftBoardCoordinate
@@ -96,9 +98,11 @@ def pausedScreenInformation(app):
     app.musicHeight = 30
 
 def endScreenInformation(app):
-    app.newGameLeft, app.newGameTop = 250, 398
-    app.newGameWidth, app.newGameHeight = 200, 40
-
+    app.gameOverXCoordEnd = (app.boardWidth/2+app.leftBoardCoordinate)
+    app.gameOverYCoordEnd = app.boardHeight/4+app.topBoardCoordinate
+    app.newGameYCoordEnd = 3*app.boardHeight/4+app.topBoardCoordinate
+    app.newGameWidthEnd = 180
+    app.newGameHeightEnd = 40
 
 
 
@@ -148,7 +152,7 @@ def drawPausedScreen(app):
     
     #New Game Button
     drawRect(app.newGameXCoord, 
-             app.newGameYCoord, app.newGameWidth, app.newGameHeight, 
+             app.newGameYCoord, app.newGameWidthPaused, app.newGameHeightPaused, 
              align = 'center', fill = chocolate)
     drawLabel('NEW GAME', app.newGameXCoord, 
               app.newGameYCoord, bold = True, 
@@ -165,18 +169,17 @@ def drawPausedScreen(app):
 
 def drawEndScreen(app):
     drawRect(app.leftBoardCoordinate, app.topBoardCoordinate, app.boardWidth, 
-             app.boardHeight, fill = 'black', opacity = 90)
+             app.boardHeight, fill = 'black', opacity = 40)
 
-    drawLabel('GAME OVER', app.boardWidth/2+app.leftBoardCoordinate, 
-              app.boardHeight/4+app.topBoardCoordinate, bold = True, 
+    drawLabel('GAME OVER', app.gameOverXCoordEnd, 
+              app.gameOverYCoordEnd, bold = True, 
               font='monospace', size = 30, fill = 'white')
 
 
-    drawRect(app.boardWidth/2+app.leftBoardCoordinate,
-             3*app.boardHeight/5+app.topBoardCoordinate, 200, 40, align = 'center', 
-             fill = 'white')
-    drawLabel('New Game', app.boardWidth/2+app.leftBoardCoordinate,
-               3*app.boardHeight/5+app.topBoardCoordinate, bold = True, 
+    drawRect(app.gameOverXCoordEnd, app.newGameYCoordEnd, app.newGameWidthEnd, 
+             app.newGameHeightEnd, align = 'center', fill = 'white')
+    
+    drawLabel('New Game', app.gameOverXCoordEnd, app.newGameYCoordEnd, bold = True, 
                font='orbitron', size = 30)
 
 def drawScore(app):
@@ -217,11 +220,14 @@ def resetGame(app):
 
 #Event Handlers
 def game_onMousePress(app, mouseX, mouseY):
+    #Game Over
     if app.gameOver:
-        if (app.newGameLeft < mouseX < app.newGameLeft+app.newGameWidth and 
-            app.newGameTop < mouseY < app.newGameTop+app.newGameHeight):
-            resetGame(app)
+        #New Game
+        if ((app.gameOverXCoordEnd - app.newGameWidthEnd/2) < mouseX < (app.gameOverXCoordEnd+app.newGameWidthEnd/2) and 
+            (app.newGameYCoordEnd - app.newGameHeightEnd/2) < mouseY < (app.newGameYCoordEnd+app.newGameHeightEnd/2)):
+            setActiveScreen('startScreen')
     
+    #Paused
     if app.paused and not app.gameOver:
         #Mouse in paused button
         if ((app.resumeXCoord - app.resumeWidth/2) < mouseX < (app.resumeWidth/2 + app.resumeXCoord) and 
@@ -229,8 +235,8 @@ def game_onMousePress(app, mouseX, mouseY):
             app.paused = not app.paused
         
         #Mouse in new game button
-        elif ((app.newGameXCoord - app.newGameWidth/2) < mouseX < (app.newGameXCoord + app.newGameWidth/2) and 
-            (app.newGameYCoord - app.newGameHeight/2) < mouseY < (app.newGameYCoord + app.newGameHeight/2)):
+        elif ((app.gameOverXCoordEnd - app.gameOverXCoordEnd/2) < mouseX < (app.gameOverXCoordEnd + app.gameOverXCoordEnd/2) and 
+            (app.newGameYCoord - app.newGameYCoordEnd/2) < mouseY < (app.newGameYCoordEnd + app.newGameYCoordEnd/2)):
             resetGame(app)
 
         #mouse in music button
@@ -283,7 +289,8 @@ def game_onStep(app):
         #lower the rate of checking connected rows so program can be faster 
         #formula divides by tetrino size; checks rows when there are no gaps between blocks
         app.gravityStepsPerSecond += 1
-        if app.gravityStepsPerSecond%2*app.tetrinoSize==0:
+        print(app.gravityStepsPerSecond)
+        if app.gravityStepsPerSecond%(2*app.tetrinoSize)==0:
             # if not app.isSandMoving:
             checkAndClearConnectedRows(app)
             #move row down 1 row and 0 col

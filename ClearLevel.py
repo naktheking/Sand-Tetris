@@ -2,8 +2,6 @@
 #playsound learned from https://www.geeksforgeeks.org/play-sound-in-python/ 
 from playsound import playsound
 
-
-
 #returns a dictionary of the top of the color groups on the left side
 #key: row     value: color
 def findAllColorGroupOnLeft(app):

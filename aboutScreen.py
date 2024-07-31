@@ -1,6 +1,7 @@
 from cmu_graphics import *
+from PIL import Image
 
-def startScreen_onAppStart(app):
+def about_onAppStart(app):
     app.width = 700
     app.height = 700
     app.boardWidth = app.width/2
@@ -9,40 +10,70 @@ def startScreen_onAppStart(app):
     app.topBoardCoordinate = app.height//2-(app.boardHeight//2)
     app.music = False
 
-def startScreen_redrawAll(app):
-    # drawRect(app.leftBoardCoordinate, app.topBoardCoordinate, app.boardWidth, app.boardHeight,
-    #          fill = None, border = 'gray', borderWidth = 2)
-    drawRect(0, 0, app.width, app.height, fill = 'black')
-    drawLabel('Lauren', app.width/2, app.height/4, font = 'monospace', size = 18, 
-              fill = 'white')
-    drawLabel('SANDS-TRIS', app.width/2, app.height/3, font='monospace', size = 40, 
-              fill = 'white')
-    #start button
-    drawRect(app.width/3, app.height*2/3, 150, 60, border='white', 
-             align = 'center', fill= None)
-    drawLabel('Start', app.width/3, app.height*2/3, font='orbitron', size=40, 
-              fill = 'white')
-    #About button
-    drawRect(app.width*2/3, app.height*2/3, 150, 60, border='white', 
-             align = 'center', fill= None)
-    drawLabel('About', app.width*2/3, app.height*2/3, font='orbitron', size=40,
-              fill = 'white')
-    #music button
-    drawRect(app.width*9/10, app.height/5, 70, 30, align = 'center', fill = None, 
-             border = 'white')
-    drawLabel('Music', app.width*9/10, app.height/5, font='caveat', size = 14,
-              fill = 'white')
-    if not app.music:
-        drawLine(app.width*9/10+35, app.height/5-15, app.width*9/10-35, 
-                 app.height/5+15, fill = 'red')
-        
-def startScreen_onMousePress(app, mouseX, mouseY):
-    #if button is in start button
-    if (((app.width/3)-75 < mouseX < (app.width/3+75)) and 
-    ((app.height*2/3)-30 < mouseY < (app.height*2/3)+30)):
-        setActiveScreen('game')
+    app.homeButtonImage = CMUImage(Image.open('pngegg.png'))
 
-    #if button is in about button
-    elif ((app.width*2/3)-75 < mouseX < (app.width*2/3)+75 and 
-        ((app.height*2/3)-30 < mouseY < (app.height*2/3)+30)):
-        setActiveScreen('about')
+def about_redrawAll(app):
+    drawRect(0, 0, app.width, app.height, fill = 'black')
+
+    #Title
+    drawLabel('Lauren Sands-Tris', app.width/2, 4*app.height/20, fill = 'white', 
+               size = 30)
+    drawLabel('Controls', app.width/2, 6*app.height/20, fill = 'white', 
+               size = 20)
+    
+    #Move Right
+    drawLabel('Move Left/Right', app.width/4, 8*app.height/20, fill = 'white', 
+               size = 17, align = 'left')
+    drawLabel('Left/Right Arrow key', (2*app.width/4)+60, 8*app.height/20, fill = 'white', 
+               size = 17, align = 'left')
+    #Move Down
+    drawLabel('Move Down', app.width/4, 9*app.height/20, fill = 'white', 
+               size = 17, align = 'left')
+    drawLabel('Down-Arrow', (2*app.width/4)+60, 9*app.height/20, fill = 'white', 
+               size = 17, align = 'left')
+
+    drawLabel('Instant Down', app.width/4, 10*app.height/20, fill = 'white', 
+               size = 17, align = 'left')
+    drawLabel('Space Bar', (2*app.width/4)+60, 10*app.height/20, fill = 'white', 
+               size = 17, align = 'left')
+
+    drawLabel('Pause/unpause', app.width/4, 11*app.height/20, fill = 'white', 
+               size = 17, align = 'left')
+    drawLabel('p', (2*app.width/4)+60, 11*app.height/20, fill = 'white', 
+               size = 17, align = 'left')
+    
+
+    
+
+    #Credits
+    drawLabel('Credits', app.width/2, 13*app.height/20, fill = 'white', 
+               size = 25,  bold = True)
+    
+    #Creator
+    drawLabel('Creator:', app.width/4, 14*app.height/20, fill = 'white', 
+               size = 17, align = 'left')
+    drawLabel('Max Zhang', (2*app.width/4)+60, 14*app.height/20, fill = 'white', 
+               size = 17, align = 'left')
+    
+    #SFX
+    drawLabel('Sound Effects:', app.width/4, 15*app.height/20, fill = 'white', 
+               size = 17, align = 'left')
+    drawLabel('Oliver Zhang', (2*app.width/4)+60, 15*app.height/20, fill = 'white', 
+               size = 17, align = 'left')
+    
+    #BGM
+    drawLabel('Background Music', app.width/4, 16*app.height/20, fill = 'white', 
+               size = 17, align = 'left')
+    drawLabel('King Wang', (2*app.width/4)+60, 16*app.height/20, fill = 'white', 
+               size = 17, align = 'left')
+    
+    
+    #Home Button
+    drawImage(app.homeButtonImage, 80, 70, width = 50, height = 50, align = 'center')
+    drawRect(80, 70, 50, 50, align = 'center', fill = None, border = 'white')
+
+def about_onMousePress(app, mouseX, mouseY):
+    #if button is in start button
+    if ((55 < mouseX < 105) and 
+        (45 < mouseY < 95)):
+        setActiveScreen('startScreen')

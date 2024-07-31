@@ -25,7 +25,7 @@ def redrawAll(app):
     
     #New Game Button
     drawRect(app.newGameXCoord, 
-             app.newGameYCoord,app.newGameWidth, app.newGameHeight, 
+             app.newGameYCoord,app.newGameWidthEnd, app.newGameHeightEnd, 
              align = 'center', fill = chocolate)
     drawLabel('NEW GAME', app.newGameXCoord, 
               app.newGameYCoord, bold = True, 
