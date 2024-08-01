@@ -291,9 +291,9 @@ def game_onStep(app):
     if not app.paused and not app.gameOver:
         #lower the rate of checking connected rows so program can be faster 
         #formula divides by tetrino size; checks rows when there are no gaps between blocks
-        app.gravityStepsPerSecond += 1
         if app.gravityStepsPerSecond%(2 * app.tetrinoSize) == 0:
             checkAndClearConnectedRows(app)
+        app.gravityStepsPerSecond += 1
         moveSandsDown(app)
         moveTetromino(app, 1, 0)
         checkGameOver(app)
