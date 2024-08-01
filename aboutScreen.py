@@ -48,7 +48,7 @@ def about_redrawAll(app):
     #Fast moving
     drawLabel('Move Sideways Faster:', app.width/4, 12*app.height/20, fill = 'white', 
                size = 17, align = 'left')
-    drawLabel('s', (2*app.width/4)+60, 12*app.height/20, fill = 'white', 
+    drawLabel("hold 's' along with a direction", (2*app.width/4)+60, 12*app.height/20, fill = 'white', 
                size = 17, align = 'left')
     
 
