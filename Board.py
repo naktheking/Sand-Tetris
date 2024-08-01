@@ -6,6 +6,12 @@ from gameStatus import *
 from StartScreen import *
 from aboutScreen import *
 import random
+#Use external python module because cmu graphic's sound system is unavilable
+#All pygame and threading codes copied from https://chatgpt.com
+import pygame
+import threading
+pygame.mixer.init()
+
 
 
 #Informations and modules
@@ -24,8 +30,12 @@ def game_onAppStart(app):
     endScreenInformation(app)
     sandInformation(app)
     getNewTetromino(app)
-    
-    playsound(app.tetrisThemeSong, False)
+
+    #Playing music
+    def play_sound_loop():
+        app.tetrisThemeSong.play(loops=-1)
+    threading.Thread(target=play_sound_loop).start()
+
 
 def boardInformations(app):
     #Rows and Cols
@@ -98,10 +108,13 @@ def gameInformation(app):
     #sounds
     sandCreedRd = 'SandCreekRd.m4a'
     sussy = 'sussy.m4a'
-    tetrisThemeSong = 'tetrisThemeSong.mp3'
+
     app.clearLevelSound = sandCreedRd
     app.gameOverSound = sussy
-    app.tetrisThemeSong = tetrisThemeSong
+
+    app.tetrisThemeSong = pygame.mixer.Sound('tetrisThemeSong.mp3')
+    app.tetrisThemeSong.set_volume(0.4)
+    
     app.musicStepsPerSecond = 0
 
 def pausedScreenInformation(app):
@@ -321,11 +334,6 @@ def game_onKeyHold(app, keys):
             moveTetromino(app, 0, 1)
 
 def game_onStep(app):   
-    app.musicStepsPerSecond += 1
-    if app.musicStepsPerSecond == 961:
-        app.musicStepsPerSecond = 0
-        playsound(app.tetrisThemeSong, False)
-
     if not app.paused and not app.gameOver:
         #lower the rate of checking connected rows so program can be faster 
         #formula divides by tetrino size; checks rows when there are no gaps between blocks
@@ -385,4 +393,5 @@ def game_onMouseMove(app, mouseX, mouseY):
 
 def main():
     runAppWithScreens(initialScreen='startScreen')
+
 main()
