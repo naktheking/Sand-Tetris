@@ -56,6 +56,12 @@ def tetrinoInformations(app):
     app.rotatedTetrinoShape = []
     app.rotatedTetrinoPiece = []
 
+
+    #Next piece in rotation
+    app.nextPieceShape = []
+    app.nextPieceColor = 'green'
+
+
     #current tetrino location 
     app.currRow = 0
     app.currCol = 0
@@ -199,19 +205,26 @@ def drawEndScreen(app):
     drawLabel('New Game', app.gameOverXCoordEnd, app.newGameYCoordEnd, bold = True, 
                font='orbitron', size = 30)
 
+def drawNextPiece(app):
+    pass
+
+def drawTopScore(app):
+    drawLabel(f'Top Score: {app.highestScore}', 4*app.width/5, 5*app.height/10, fill = 'gold',
+              size = 30, bold = True)
+    
 def drawScore(app):
     #Scores
-    drawLabel(f'Score: {app.score}', 4*app.width/5, 13*app.width/70, fill = 'white',
+    drawLabel(f'Score: {app.score}', 4*app.width/5, 6*app.height/10, fill = 'white',
               size = 24, bold = True)
 
 def drawLevel(app):
     #Levels
-    drawLabel(f'Level: {app.level}', 4*app.width/5, 30*app.height/70, fill = 'white',
+    drawLabel(f'Level: {app.level}', 4*app.width/5, 7*app.height/10, fill = 'white',
               size = 24, bold = True)
 
 def drawLinesCleared(app):
     #Lines
-    drawLabel(f'Lines: {app.linesCleared}', 4*app.width/5, 47*app.height/70, fill = 'white',
+    drawLabel(f'Lines: {app.linesCleared}', 4*app.width/5, 8*app.height/10, fill = 'white',
               size = 24, bold = True)
 
 #Functions
@@ -307,6 +320,7 @@ def game_redrawAll(app):
     drawScore(app)
     drawLevel(app)
     drawLinesCleared(app)
+    drawTopScore(app)
     drawTetromino(app)
     drawBoard(app)
     if app.gameOver:

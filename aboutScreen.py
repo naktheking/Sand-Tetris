@@ -10,7 +10,7 @@ def about_onAppStart(app):
     app.topBoardCoordinate = app.height//2-(app.boardHeight//2)
     app.music = False
 
-    app.homeButtonImage = CMUImage(Image.open('homeButton.png'))
+    app.homeButtonImage = CMUImage(Image.open('button.png'))
 
 def about_redrawAll(app):
     drawRect(0, 0, app.width, app.height, fill = 'black')
@@ -73,8 +73,8 @@ def about_redrawAll(app):
     
     
     #Home Button
-    drawImage(app.homeButtonImage, 80, 70, width = 50, height = 50, align = 'center')
-    drawRect(80, 70, 50, 50, align = 'center', fill = None, border = 'white')
+    drawImage(app.homeButtonImage, 80, 70, width = 50, height = 45, align = 'center')
+    drawRect(80, 70, 50, 45, align = 'center', fill = None, border = 'white')
 
 def about_onMousePress(app, mouseX, mouseY):
     #if button is in start button
