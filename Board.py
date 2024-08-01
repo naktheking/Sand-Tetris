@@ -99,7 +99,7 @@ def gameInformation(app):
     app.linesCleared = 0
     app.highestScore = 0
     app.levelTimesPerSecond = 0
-    app.tetrinoMovingSpeed = app.level
+    app.tetrinoMovingSpeed = app.level//2 + 1
     
     #game status
     app.paused = False
@@ -112,8 +112,9 @@ def gameInformation(app):
     app.clearLevelSound = sandCreedRd
     app.gameOverSound = sussy
 
+    #song volume
     app.tetrisThemeSong = pygame.mixer.Sound('tetrisThemeSong.mp3')
-    app.tetrisThemeSong.set_volume(0.4)
+    app.tetrisThemeSong.set_volume(0.2)
     
     app.musicStepsPerSecond = 0
 
@@ -319,6 +320,7 @@ def game_onKeyPress(app, key):
         
     if key == 'space':
         while moveTetromino(app, 1, 0):
+            app.score += 1
             pass
 
 def game_onKeyHold(app, keys):

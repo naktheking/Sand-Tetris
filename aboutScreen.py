@@ -22,15 +22,15 @@ def about_redrawAll(app):
     
     
     #Move Right
-    drawLabel('Move Left/Right', app.width/4, 8*app.height/20, fill = 'white', 
+    drawLabel('Move Left/Right/Down', app.width/4, 8*app.height/20, fill = 'white', 
                size = 17, align = 'left')
-    drawLabel('Left/Right Arrow key', (2*app.width/4)+60, 8*app.height/20, fill = 'white', 
+    drawLabel('Left/Right/Down Arrow key', (2*app.width/4)+60, 8*app.height/20, fill = 'white', 
                size = 17, align = 'left')
     
-    #Move Down
-    drawLabel('Move Down', app.width/4, 9*app.height/20, fill = 'white', 
+    #Rotating
+    drawLabel('Rotate Clockwise', app.width/4, 9*app.height/20, fill = 'white', 
                size = 17, align = 'left')
-    drawLabel('Down-Arrow', (2*app.width/4)+60, 9*app.height/20, fill = 'white', 
+    drawLabel('Up Arrow Key', (2*app.width/4)+60, 9*app.height/20, fill = 'white', 
                size = 17, align = 'left')
     
     #Instant Down
