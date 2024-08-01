@@ -31,6 +31,8 @@ def findAllColorGroupOnLeft(app):
 #DFS with stack learned from Lauren Sands
 #given row and col is the top block of a color group
 def checkLevelConnected(app, row, col, color):
+    if app.sandFreeFall:
+        return
     filledCells = set()
     cellsToExplore = [(row, col)]
     #if the cell is already in cells to explore, no need to add it again and check it again

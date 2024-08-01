@@ -8,6 +8,7 @@ def isOnBoardAndValid(app, nextRow, nextCol):
 
 #move each sand particle down
 def moveSandsDown(app):
+    app.sandFreeFall = False
     #establishing directions and positions to remove once inside the for loop
     direction = [(1, -1), (1, +1)]
     valuesToRemove = []
@@ -17,10 +18,14 @@ def moveSandsDown(app):
     for row, col in app.board:
         color = app.board.get((row, col))
         if isOnBoardAndValid(app, row+1, col):
+            
             #add the values to a set to remove it after the loop
             #also add the new value to another set to add it after the loop
             valuesToRemove.append((row, col))
             valuesToAdd.append((row+1, col, color))
+
+            #if the block can move down by 1, the sand is still in free fall
+            app.sandFreeFall = True
         else:
             #samething but to leftbottom and rightbottom directions if direct bottom is filled
             drow, dcol = random.choice(direction)

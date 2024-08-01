@@ -70,6 +70,9 @@ def tetrinoInformations(app):
 def gravityInformation(app):
     app.isSandMoving = False
 
+    #check if the sands are still in free fall
+    app.sandFreeFall = False
+    
     #To limit number of times of checking connected rows
     app.gravityStepsPerSecond = 0
 
@@ -84,6 +87,7 @@ def gameInformation(app):
     app.linesCleared = 0
     app.highestScore = 0
     app.levelTimesPerSecond = 0
+    app.tetrinoMovingSpeed = app.level
     
     #game status
     app.paused = False
@@ -322,7 +326,8 @@ def game_onStep(app):
             checkAndClearConnectedRows(app)
         app.gravityStepsPerSecond += 1
         moveSandsDown(app)
-        moveTetromino(app, 1, 0)
+        for _ in range(app.tetrinoMovingSpeed):
+            moveTetromino(app, 1, 0)
         checkGameOver(app)
     #level increases by 1 every 10 seconds
     app.levelTimesPerSecond += 1
