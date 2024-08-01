@@ -91,13 +91,17 @@ def startScreen_onMousePress(app, mouseX, mouseY):
 
 
 def startScreen_onMouseMove(app, mouseX, mouseY):
-    # If mouse is over start button, mvoe everything down
+    # If mouse is over start button, move everything down
     if (((app.width / 3) - 75 < mouseX < (app.width / 3 + 75)) and 
         ((app.height * 2 / 3) - 30 < mouseY < (app.height * 2 / 3) + 30)):
         app.startButtonY = app.height * 2 / 3 + 5
+
+    #if mouse is over about button
     elif ((app.width * 2 / 3) - 75 < mouseX < (app.width * 2 / 3) + 75 and 
         ((app.height * 2 / 3) - 30 < mouseY < (app.height * 2 / 3) + 30)):
         app.aboutButtonY = app.width * 2 / 3 + 5
+    
+    #not on either button
     else:
         app.startButtonY = app.height * 2 / 3
         app.aboutButtonY = app.width * 2 / 3

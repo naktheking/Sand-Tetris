@@ -163,27 +163,38 @@ def drawPausedScreen(app):
 
     #Faded background
     drawRect(app.leftBoardCoordinate, app.topBoardCoordinate, app.boardWidth, 
-             app.boardHeight, fill = gray, opacity = 90)
+             app.boardHeight, fill = gray, opacity = 70)
+
     #Paused Text
     drawLabel('PAUSED', app.boardWidth/2 + app.leftBoardCoordinate, 
               app.boardHeight/4 + app.topBoardCoordinate, size = 24, 
               fill='white')
-
-    #Resume Button
-    drawRect(app.resumeXCoord, 
-             app.resumeYCoord, app.resumeWidth, app.resumeHeight, 
-             align = 'center', fill = peru)
-    drawLabel('RESUME', app.resumeXCoord,
-               app.resumeYCoord, bold = True, 
-               font='monospace', size = 24)
+#Resume button
+    # Shadow for Resume Button
+    drawRect(app.resumeXCoord, (2*app.boardHeight/5 + app.topBoardCoordinate + 5), app.resumeWidth, 
+             app.resumeHeight, align='center', fill='black') 
     
-    #New Game Button
-    drawRect(app.newGameXCoord, 
-             app.newGameYCoord, app.newGameWidthPaused, app.newGameHeightPaused, 
-             align = 'center', fill = chocolate)
-    drawLabel('NEW GAME', app.newGameXCoord, 
-              app.newGameYCoord, bold = True, 
-              font='monospace', size = 24)
+    # Resume Button
+    drawRect(app.resumeXCoord, app.resumeYCoord, app.resumeWidth, 
+             app.resumeHeight, align='center', fill=rgb(205, 133, 63))
+    
+    # Label for Resume Button
+    drawLabel('RESUME', app.resumeXCoord, app.resumeYCoord, bold=True, 
+              font='monospace', size=24, fill=rgb(255, 255, 255))
+    
+#New Game Button    
+    # Shadow for New Game Button (only at the bottom)
+    drawRect(app.newGameXCoord, 3*app.boardHeight/5 + app.topBoardCoordinate + 5, app.newGameWidthPaused, 
+             app.newGameHeightPaused, align='center', fill='black')
+    
+    # Main New Game Button
+    drawRect(app.newGameXCoord, app.newGameYCoord, app.newGameWidthPaused, 
+             app.newGameHeightPaused, align='center', fill=rgb(210, 105, 30))  # Chocolate color
+    
+    # Label for New Game Button
+    drawLabel('NEW GAME', app.newGameXCoord, app.newGameYCoord, bold=True, 
+              font='monospace', size=24, fill=rgb(255, 255, 255))  # White for text
+
     
     #Music Button
     drawLabel('MUSIC', app.musicXCoord, app.musicYCoord, fill = 'white')
@@ -206,9 +217,9 @@ def drawEndScreen(app):
 
     #New Game Button
     drawRect(app.gameOverXCoordEnd, app.newGameYCoordEnd, app.newGameWidthEnd, 
-             app.newGameHeightEnd, align = 'center', fill = 'white')
+             app.newGameHeightEnd, align = 'center', fill = 'navy')
     drawLabel('New Game', app.gameOverXCoordEnd, app.newGameYCoordEnd, bold = True, 
-               font='orbitron', size = 30)
+               font='orbitron', size = 30, fill = 'violet')
 
 def drawNextPiece(app):
     #Drawing the text
@@ -271,8 +282,10 @@ def game_onMousePress(app, mouseX, mouseY):
     #Game Over
     if app.gameOver:
         #New Game
-        if ((app.gameOverXCoordEnd - app.newGameWidthEnd/2) < mouseX < (app.gameOverXCoordEnd+app.newGameWidthEnd/2) and 
-            (app.newGameYCoordEnd - app.newGameHeightEnd/2) < mouseY < (app.newGameYCoordEnd+app.newGameHeightEnd/2)):
+        if ((app.gameOverXCoordEnd - app.newGameWidthEnd/2) < mouseX < 
+            (app.gameOverXCoordEnd+app.newGameWidthEnd/2) and 
+            (app.newGameYCoordEnd - app.newGameHeightEnd/2) < mouseY < 
+            (app.newGameYCoordEnd+app.newGameHeightEnd/2)):
             resetGame(app)
             setActiveScreen('startScreen')
     
@@ -347,6 +360,34 @@ def game_redrawAll(app):
         drawEndScreen(app)
     if app.paused and not app.gameOver:
         drawPausedScreen(app)
+
+def game_onMouseMove(app, mouseX, mouseY):
+    # If mouse is over New Game button, move it down
+    if (((app.boardWidth / 2 + app.leftBoardCoordinate) - 90 < mouseX < 
+         (app.boardWidth / 2 + app.leftBoardCoordinate) + 90) and 
+        ((3 * app.boardHeight / 5 + app.topBoardCoordinate) - 20 < mouseY < 
+         (3 * app.boardHeight / 5 + app.topBoardCoordinate) + 20)):
+        app.newGameYCoord = 3 * app.boardHeight / 5 + app.topBoardCoordinate + 5
+        
+    # If mouse is over Resume button, move it down
+    elif (((app.boardWidth / 2 + app.leftBoardCoordinate) - 60 < mouseX < 
+         (app.boardWidth / 2 + app.leftBoardCoordinate) + 60) and 
+        ((2 * app.boardHeight / 5 + app.topBoardCoordinate) - 25 < mouseY < 
+         (2 * app.boardHeight / 5 + app.topBoardCoordinate) + 25)):
+        app.resumeYCoord = 2 * app.boardHeight / 5 + app.topBoardCoordinate + 5
+    
+    # If mouse is over Quit button, move it down
+    if ((app.gameOverXCoordEnd - app.newGameWidthEnd/2) < mouseX < 
+            (app.gameOverXCoordEnd+app.newGameWidthEnd/2) and 
+            (app.newGameYCoordEnd - app.newGameHeightEnd/2) < mouseY < 
+            (app.newGameYCoordEnd+app.newGameHeightEnd/2) and app.gameOver):
+         app.newGameYCoordEnd = 3*app.boardHeight/4 + app.topBoardCoordinate + 5
+
+    #Mouse is not in any button
+    else:
+        app.newGameYCoord = 3 * app.boardHeight / 5 + app.topBoardCoordinate
+        app.resumeYCoord = 2 * app.boardHeight / 5 + app.topBoardCoordinate
+        app.newGameYCoordEnd = 3*app.boardHeight/4 + app.topBoardCoordinate
 
 def main():
     runAppWithScreens(initialScreen='startScreen')
