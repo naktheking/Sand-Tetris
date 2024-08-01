@@ -8,7 +8,6 @@ def about_onAppStart(app):
     app.boardHeight = app.height-20
     app.leftBoardCoordinate = app.width//2-(7*app.boardWidth//10)
     app.topBoardCoordinate = app.height//2-(app.boardHeight//2)
-    app.music = False
 
     app.homeButtonImage = CMUImage(Image.open('button.png'))
 
