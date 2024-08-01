@@ -211,9 +211,11 @@ def drawPausedScreen(app):
     
     # Label for New Game Button
     drawLabel('NEW GAME', app.newGameXCoord, app.newGameYCoord, bold=True, 
-              font='monospace', size=24, fill=rgb(255, 255, 255))  # White for text
+              font='monospace', size=24, fill='white')  # White for text
 
 def drawEndScreen(app):
+    #Pause the music
+    pygame.mixer.pause()
     #Faded Background
     drawRect(app.leftBoardCoordinate, app.topBoardCoordinate, app.boardWidth, 
              app.boardHeight, fill = 'black', opacity = 40)
@@ -225,9 +227,9 @@ def drawEndScreen(app):
 
     #New Game Button
     drawRect(app.gameOverXCoordEnd, app.newGameYCoordEnd, app.newGameWidthEnd, 
-             app.newGameHeightEnd, align = 'center', fill = 'navy')
-    drawLabel('New Game', app.gameOverXCoordEnd, app.newGameYCoordEnd, bold = True, 
-               font='orbitron', size = 30, fill = 'violet')
+             app.newGameHeightEnd, align = 'center', fill = rgb(210, 105, 30))
+    drawLabel('New Game', app.gameOverXCoordEnd, app.newGameYCoordEnd, font='orbitron', 
+              size = 30, fill = 'white')
 
 def drawNextPiece(app):
     #Drawing the text
@@ -294,6 +296,8 @@ def game_onMousePress(app, mouseX, mouseY):
             (app.gameOverXCoordEnd+app.newGameWidthEnd/2) and 
             (app.newGameYCoordEnd - app.newGameHeightEnd/2) < mouseY < 
             (app.newGameYCoordEnd+app.newGameHeightEnd/2)):
+            #unpause sound
+            pygame.mixer.unpause()
             resetGame(app)
             setActiveScreen('startScreen')
     
@@ -395,5 +399,6 @@ def game_onMouseMove(app, mouseX, mouseY):
 
 def main():
     runAppWithScreens(initialScreen='startScreen')
+
 
 main()

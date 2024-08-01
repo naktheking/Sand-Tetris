@@ -1,4 +1,5 @@
 from cmu_graphics import *
+import pygame
 
 def startScreen_onAppStart(app):
     # Screen dimensions
@@ -15,7 +16,15 @@ def startScreen_onAppStart(app):
     app.aboutButtonX = app.aboutButtonY = app.width * 2 / 3
     app.aboutButtonWidth = 3 * app.width / 14
     app.aboutButtonHeight = 3 * app.height / 35
+    
+    # Music button information
+    app.musicButtonX = app.width * 9 / 10
+    app.musicButtonY = app.height / 5
+    app.musicButtonWidth = app.width / 10
+    app.musicButtonHeight = 3 * app.height / 70
 
+    # Music
+    app.music = True
 
 def startScreen_redrawAll(app):
     # Background
@@ -48,6 +57,20 @@ def startScreen_redrawAll(app):
     
     drawLabel('ABOUT', app.aboutButtonX, app.aboutButtonY, font='orbitron', size=40,
               fill=rgb(0, 255, 0))
+    
+    # Music button
+
+    drawRect(app.musicButtonX, app.musicButtonY, app.musicButtonWidth, 
+              app.musicButtonHeight, align='center', fill=rgb(50, 50, 50), 
+              border=rgb(255, 0, 255))
+    drawLabel('MUSIC', app.musicButtonX, app.musicButtonY, font='caveat', size=14,
+               fill=rgb(0, 255, 0))
+    if not app.music:
+         drawLine(app.width * 9 / 10 + 35, app.height / 5 - 15, app.width * 9 / 10 - 35, 
+                  app.height / 5 + 15, fill=rgb(0, 128, 128))
+    drawRect(app.musicButtonX, app.musicButtonY, app.musicButtonWidth, 
+              app.musicButtonHeight, align='center', fill=None, 
+              border=rgb(0, 139, 139))
         
 def startScreen_onMousePress(app, mouseX, mouseY):
     # If button is in start button
@@ -59,6 +82,18 @@ def startScreen_onMousePress(app, mouseX, mouseY):
     elif ((app.width * 2 / 3) - 75 < mouseX < (app.width * 2 / 3) + 75 and 
         ((app.height * 2 / 3) - 30 < mouseY < (app.height * 2 / 3) + 30)):
         setActiveScreen('about')
+    
+    # If button is in music button
+    elif ((app.musicButtonX - app.musicButtonWidth / 2) < mouseX < 
+           (app.musicButtonX + app.musicButtonWidth / 2) and 
+           (app.musicButtonY - app.musicButtonHeight / 2) < mouseY <
+           (app.musicButtonY + app.musicButtonHeight / 2)):
+        if app.music:
+            app.music  = not app.music
+            pygame.mixer.pause()
+        elif not app.music:
+            app.music  = not app.music
+            pygame.mixer.unpause()
     
 
 def startScreen_onMouseMove(app, mouseX, mouseY):
