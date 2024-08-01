@@ -102,7 +102,6 @@ def gameInformation(app):
     app.clearLevelSound = sandCreedRd
     app.gameOverSound = sussy
     app.tetrisThemeSong = tetrisThemeSong
-    app.music = True
     app.musicStepsPerSecond = 0
 
 def pausedScreenInformation(app):
@@ -199,16 +198,6 @@ def drawPausedScreen(app):
     # Label for New Game Button
     drawLabel('NEW GAME', app.newGameXCoord, app.newGameYCoord, bold=True, 
               font='monospace', size=24, fill=rgb(255, 255, 255))  # White for text
-
-    
-    #Music Button
-    drawLabel('MUSIC', app.musicXCoord, app.musicYCoord, fill = 'white')
-    if not app.music:
-        drawLine(app.musicXCoord - app.musicWidth/2, app.musicYCoord + app.musicHeight/2,
-                 app.musicXCoord + app.musicWidth/2, app.musicYCoord - app.musicHeight/2,
-                 fill = 'red')
-    drawRect(app.musicXCoord, app.musicYCoord, app.musicWidth, app.musicHeight,
-             align = 'center', fill = None, border = 'white')
 
 def drawEndScreen(app):
     #Faded Background
@@ -307,11 +296,6 @@ def game_onMousePress(app, mouseX, mouseY):
             setActiveScreen('startScreen')
             resetGame(app)
 
-        #mouse in music button
-        elif (((app.musicXCoord - app.musicWidth) < mouseX < (app.musicXCoord + app.musicWidth/2)) and 
-              ((app.musicYCoord - app.musicHeight/2) < mouseY < (app.musicYCoord + app.musicHeight/2))):
-            app.music = not app.music
-
 def game_onKeyPress(app, key):
     if key == 'p':
         app.paused = not app.paused
@@ -338,7 +322,7 @@ def game_onKeyHold(app, keys):
 
 def game_onStep(app):   
     app.musicStepsPerSecond += 1
-    if app.musicStepsPerSecond == 960:
+    if app.musicStepsPerSecond == 961:
         app.musicStepsPerSecond = 0
         playsound(app.tetrisThemeSong, False)
 
