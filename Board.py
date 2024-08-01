@@ -305,6 +305,7 @@ def resetGame(app):
 
 
 
+
 #Event Handlers
 def game_onMousePress(app, mouseX, mouseY):
     #Game Over
@@ -342,8 +343,6 @@ def game_onMousePress(app, mouseX, mouseY):
                 app.music  = not app.music
                 pygame.mixer.unpause()
 
-
-
 def game_onKeyPress(app, key):
     if key == 'p':
         app.paused = not app.paused
@@ -359,6 +358,11 @@ def game_onKeyPress(app, key):
 
 def game_onKeyHold(app, keys):
     if not app.paused:
+        if 'left' in keys and 's' in keys:
+            moveTetromino(app, 0, -3)
+        if 'right' in keys and 's' in keys:
+            moveTetromino(app, 0, 3)  
+
         if 'down' in keys:
             app.score += 1
             moveTetromino(app, 1, 0)
@@ -366,8 +370,37 @@ def game_onKeyHold(app, keys):
         if 'left' in keys:
             moveTetromino(app, 0, -1)
 
-        if 'right' in keys:
+        elif 'right' in keys:
             moveTetromino(app, 0, 1)
+
+
+def game_onMouseMove(app, mouseX, mouseY):
+    # If mouse is over New Game button, move it down
+    if (((app.boardWidth / 2 + app.leftBoardCoordinate) - 90 < mouseX < 
+         (app.boardWidth / 2 + app.leftBoardCoordinate) + 90) and 
+        ((3 * app.boardHeight / 5 + app.topBoardCoordinate) - 20 < mouseY < 
+         (3 * app.boardHeight / 5 + app.topBoardCoordinate) + 20)):
+        app.newGameYCoord = 3 * app.boardHeight / 5 + app.topBoardCoordinate + 5
+        
+    # If mouse is over Resume button, move it down
+    elif (((app.boardWidth / 2 + app.leftBoardCoordinate) - 60 < mouseX < 
+         (app.boardWidth / 2 + app.leftBoardCoordinate) + 60) and 
+        ((2 * app.boardHeight / 5 + app.topBoardCoordinate) - 25 < mouseY < 
+         (2 * app.boardHeight / 5 + app.topBoardCoordinate) + 25)):
+        app.resumeYCoord = 2 * app.boardHeight / 5 + app.topBoardCoordinate + 5
+    
+    # If mouse is over Quit button, move it down
+    if ((app.gameOverXCoordEnd - app.newGameWidthEnd/2) < mouseX < 
+            (app.gameOverXCoordEnd+app.newGameWidthEnd/2) and 
+            (app.newGameYCoordEnd - app.newGameHeightEnd/2) < mouseY < 
+            (app.newGameYCoordEnd+app.newGameHeightEnd/2) and app.gameOver):
+         app.newGameYCoordEnd = 3*app.boardHeight/4 + app.topBoardCoordinate + 5
+
+    #Mouse is not in any button
+    else:
+        app.newGameYCoord = 3 * app.boardHeight / 5 + app.topBoardCoordinate
+        app.resumeYCoord = 2 * app.boardHeight / 5 + app.topBoardCoordinate
+        app.newGameYCoordEnd = 3*app.boardHeight/4 + app.topBoardCoordinate
 
 def game_onStep(app):   
     if not app.paused and not app.gameOver:
@@ -398,34 +431,6 @@ def game_redrawAll(app):
         drawEndScreen(app)
     if app.paused and not app.gameOver:
         drawPausedScreen(app)
-
-def game_onMouseMove(app, mouseX, mouseY):
-    # If mouse is over New Game button, move it down
-    if (((app.boardWidth / 2 + app.leftBoardCoordinate) - 90 < mouseX < 
-         (app.boardWidth / 2 + app.leftBoardCoordinate) + 90) and 
-        ((3 * app.boardHeight / 5 + app.topBoardCoordinate) - 20 < mouseY < 
-         (3 * app.boardHeight / 5 + app.topBoardCoordinate) + 20)):
-        app.newGameYCoord = 3 * app.boardHeight / 5 + app.topBoardCoordinate + 5
-        
-    # If mouse is over Resume button, move it down
-    elif (((app.boardWidth / 2 + app.leftBoardCoordinate) - 60 < mouseX < 
-         (app.boardWidth / 2 + app.leftBoardCoordinate) + 60) and 
-        ((2 * app.boardHeight / 5 + app.topBoardCoordinate) - 25 < mouseY < 
-         (2 * app.boardHeight / 5 + app.topBoardCoordinate) + 25)):
-        app.resumeYCoord = 2 * app.boardHeight / 5 + app.topBoardCoordinate + 5
-    
-    # If mouse is over Quit button, move it down
-    if ((app.gameOverXCoordEnd - app.newGameWidthEnd/2) < mouseX < 
-            (app.gameOverXCoordEnd+app.newGameWidthEnd/2) and 
-            (app.newGameYCoordEnd - app.newGameHeightEnd/2) < mouseY < 
-            (app.newGameYCoordEnd+app.newGameHeightEnd/2) and app.gameOver):
-         app.newGameYCoordEnd = 3*app.boardHeight/4 + app.topBoardCoordinate + 5
-
-    #Mouse is not in any button
-    else:
-        app.newGameYCoord = 3 * app.boardHeight / 5 + app.topBoardCoordinate
-        app.resumeYCoord = 2 * app.boardHeight / 5 + app.topBoardCoordinate
-        app.newGameYCoordEnd = 3*app.boardHeight/4 + app.topBoardCoordinate
 
 def main():
     runAppWithScreens(initialScreen='startScreen')

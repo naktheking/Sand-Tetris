@@ -45,29 +45,33 @@ def about_redrawAll(app):
     drawLabel('p', (2*app.width/4)+60, 11*app.height/20, fill = 'white', 
                size = 17, align = 'left')
     
-
+    #Fast moving
+    drawLabel('Move Sideways Faster:', app.width/4, 12*app.height/20, fill = 'white', 
+               size = 17, align = 'left')
+    drawLabel('s', (2*app.width/4)+60, 12*app.height/20, fill = 'white', 
+               size = 17, align = 'left')
     
 
     #Credits
-    drawLabel('Credits', app.width/2, 13*app.height/20, fill = 'white', 
+    drawLabel('Credits', app.width/2, 14*app.height/20, fill = 'white', 
                size = 25,  bold = True)
     
     #Creator
-    drawLabel('Creator:', app.width/4, 14*app.height/20, fill = 'white', 
+    drawLabel('Creator:', app.width/4, 15*app.height/20, fill = 'white', 
                size = 17, align = 'left')
-    drawLabel('Max Zhang', (2*app.width/4)+60, 14*app.height/20, fill = 'white', 
+    drawLabel('Max Zhang', (2*app.width/4)+60, 15*app.height/20, fill = 'white', 
                size = 17, align = 'left')
     
     #SFX
-    drawLabel('Sound Effects:', app.width/4, 15*app.height/20, fill = 'white', 
+    drawLabel('Sound Effects:', app.width/4, 16*app.height/20, fill = 'white', 
                size = 17, align = 'left')
-    drawLabel('Oliver Zhang', (2*app.width/4)+60, 15*app.height/20, fill = 'white', 
+    drawLabel('Oliver Zhang', (2*app.width/4)+60, 16*app.height/20, fill = 'white', 
                size = 17, align = 'left')
     
     #BGM
-    drawLabel('Background Music:', app.width/4, 16*app.height/20, fill = 'white', 
+    drawLabel('Background Music:', app.width/4, 17*app.height/20, fill = 'white', 
                size = 17, align = 'left')
-    drawLabel('King Wang', (2*app.width/4)+60, 16*app.height/20, fill = 'white', 
+    drawLabel('King Wang', (2*app.width/4)+60, 17*app.height/20, fill = 'white', 
                size = 17, align = 'left')
     
     

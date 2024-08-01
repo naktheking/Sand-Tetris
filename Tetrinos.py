@@ -77,18 +77,6 @@ def turnPieceToCoord(app, piece, color):
                             app.tetrinoPiece.append(((row * app.tetrinoSize + innerRow), (col * app.tetrinoSize + innerCol + startCol), color))
     app.isSandMoving = True
 
-#same function as top but returns the list instead of changing it
-def turnNextPieceToCoord(app, piece, color):
-    result = []
-    startCol = ((app.cols-piece.getLengthOfCol())//2)
-    lengthOfRow, lengthOfCol = piece.getLengthOfRow(), piece.getLengthOfCol()
-    for row in range(lengthOfRow):
-        for col in range(lengthOfCol):    
-                if piece.checkCondition(row, col) == True:
-                    for innerRow in range(app.tetrinoSize):
-                        for innerCol in range(app.tetrinoSize):
-                            result.append(((row * app.tetrinoSize + innerRow + 20), (col * app.tetrinoSize + innerCol + startCol+28), color))
-    return result
 
 #given the rotated piece shape; it rotates and expands it to match the board size
 def turnPieceShapeToCoord(app, pieceShape, color):
@@ -117,6 +105,22 @@ def turnPieceShapeToCoord(app, pieceShape, color):
         app.rotatedTetrinoShape = pieceShape
         app.tetrinoPiece =  app.rotatedTetrinoPiece    
     app.isSandMoving = True
+
+
+#same function as top but returns the list instead of changing it
+def turnNextPieceToCoord(app, piece, color):
+    result = []
+    startCol = ((app.cols-piece.getLengthOfCol())//2)
+    lengthOfRow, lengthOfCol = piece.getLengthOfRow(), piece.getLengthOfCol()
+    for row in range(lengthOfRow):
+        for col in range(lengthOfCol):    
+                if piece.checkCondition(row, col) == True:
+                    for innerRow in range(app.tetrinoSize):
+                        for innerCol in range(app.tetrinoSize):
+                            result.append(((row * app.tetrinoSize + innerRow + 20), (col * app.tetrinoSize + innerCol + startCol+28), color))
+    return result
+
+
 
 #check if the after rotated block is out of bound or touching existing blocks
 def checkRotateCondition(app):
