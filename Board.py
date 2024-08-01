@@ -119,6 +119,12 @@ def gameInformation(app):
     app.musicStepsPerSecond = 0
 
 def pausedScreenInformation(app):
+    #Music button infromations
+    app.musicXCoord = 4*app.boardWidth/5 + app.leftBoardCoordinate
+    app.musicYCoord = app.boardHeight/10 + app.topBoardCoordinate
+    app.musicWidth = 70
+    app.musicHeight = 30
+
     #Resume button informations
     app.resumeXCoord = app.boardWidth/2 + app.leftBoardCoordinate
     app.resumeYCoord = 2*app.boardHeight/5 + app.topBoardCoordinate
@@ -187,6 +193,18 @@ def drawPausedScreen(app):
     drawLabel('PAUSED', app.boardWidth/2 + app.leftBoardCoordinate, 
               app.boardHeight/4 + app.topBoardCoordinate, size = 24, 
               fill='white')
+
+#Music Button
+    drawRect(app.musicXCoord, app.musicYCoord, app.musicWidth, app.musicHeight,
+            align = 'center', fill = None, border = 'white')
+    drawLabel('MUSIC', app.musicXCoord, app.musicYCoord, fill = 'white')
+    if not app.music:
+        drawLine(app.musicXCoord - app.musicWidth/2, app.musicYCoord + app.musicHeight/2,
+                app.musicXCoord + app.musicWidth/2, app.musicYCoord - app.musicHeight/2,
+                fill = 'red')
+    drawRect(app.musicXCoord, app.musicYCoord, app.musicWidth, app.musicHeight,
+            align = 'center', fill = None, border = 'white')
+
 #Resume button
     # Shadow for Resume Button
     drawRect(app.resumeXCoord, (2*app.boardHeight/5 + app.topBoardCoordinate + 5), app.resumeWidth, 
@@ -313,6 +331,18 @@ def game_onMousePress(app, mouseX, mouseY):
             (app.newGameYCoord - app.newGameYCoordEnd/2) < mouseY < (app.newGameYCoordEnd + app.newGameYCoordEnd/2)):
             setActiveScreen('startScreen')
             resetGame(app)
+
+        #mouse in music button
+        elif (((app.musicXCoord - app.musicWidth) < mouseX < (app.musicXCoord + app.musicWidth/2)) and 
+               ((app.musicYCoord - app.musicHeight/2) < mouseY < (app.musicYCoord + app.musicHeight/2))):
+            if app.music:
+                app.music  = not app.music
+                pygame.mixer.pause()
+            elif not app.music:
+                app.music  = not app.music
+                pygame.mixer.unpause()
+
+
 
 def game_onKeyPress(app, key):
     if key == 'p':
