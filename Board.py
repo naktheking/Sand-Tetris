@@ -242,6 +242,7 @@ def game_onMousePress(app, mouseX, mouseY):
         #New Game
         if ((app.gameOverXCoordEnd - app.newGameWidthEnd/2) < mouseX < (app.gameOverXCoordEnd+app.newGameWidthEnd/2) and 
             (app.newGameYCoordEnd - app.newGameHeightEnd/2) < mouseY < (app.newGameYCoordEnd+app.newGameHeightEnd/2)):
+            resetGame(app)
             setActiveScreen('startScreen')
     
     #Paused
@@ -269,8 +270,7 @@ def game_onKeyPress(app, key):
     if key == 'up':
         rotatedPiece = rotate2dListClockwise(app.rotatedTetrinoShape)
         turnPieceShapeToCoord(app, rotatedPiece, app.tetrinoColor)
-        app.rotatedTetrinoShape = rotatedPiece
-
+        
     if key == 'space':
         while moveTetromino(app, 1, 0):
             pass
@@ -288,7 +288,7 @@ def game_onKeyHold(app, keys):
             moveTetromino(app, 0, 1)
 
 def game_onStep(app):    
-    if not app.paused:
+    if not app.paused and not app.gameOver:
         #lower the rate of checking connected rows so program can be faster 
         #formula divides by tetrino size; checks rows when there are no gaps between blocks
         app.gravityStepsPerSecond += 1
@@ -296,6 +296,7 @@ def game_onStep(app):
             checkAndClearConnectedRows(app)
         moveSandsDown(app)
         moveTetromino(app, 1, 0)
+        checkGameOver(app)
     #level increases by 1 every 10 seconds
     app.levelTimesPerSecond += 1
     if app.levelTimesPerSecond % (app.stepsPerSecond*10) == 0 and not app.paused:

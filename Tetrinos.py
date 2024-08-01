@@ -60,6 +60,9 @@ def getNewTetromino(app):
     app.rotatedTetrinoShape = piece.shape
     app.tetrinoColor = color
     turnPieceToCoord(app, piece, app.tetrinoColor)
+    if tetrominoContact(app, app.tetrinoPiece):
+        app.paused = True
+        app.gameOver = True
 
 #expanding pieces to match the size of the board
 def turnPieceToCoord(app, piece, color):
@@ -114,6 +117,8 @@ def checkRotateCondition(app):
 #check if it tounches the board
 #if it does, turn everything into sands and spawn a new piece
 def moveTetromino(app, drow, dcol):
+    if app.paused or app.gameOver:
+        return
     newTetrinoPiece = []
     moved = False
     for i in range(len(app.tetrinoPiece)):
@@ -150,6 +155,8 @@ def moveTetromino(app, drow, dcol):
     app.tetrinoPiece = newTetrinoPiece
 
     if tetrominoContact(app, app.tetrinoPiece):
+        if app.gameOver:
+            return False
         for row, col, color in app.tetrinoPiece:
             app.board[(row, col)] = color
         app.tetrinoPiece = []
@@ -159,7 +166,7 @@ def moveTetromino(app, drow, dcol):
     else:
         return True
 
-#code copied from previous Tetris assignment on csacademy
+#code copied from previous Tetris assignment on CSAcademy
 def rotate2dListClockwise(L):
     M = []
     for j in range(len(L[0])):
