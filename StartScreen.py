@@ -27,7 +27,7 @@ def startScreen_onAppStart(app):
 
 def startScreen_redrawAll(app):
     #Background
-    drawRect(0, 0, app.width, app.height, fill = 'black')
+    drawRect(0, 0, app.width, app.height, fill = 'gray')
     
     #Title
     drawLabel('Lauren', app.width/2, app.height/4, font = 'monospace', size = 18, 
@@ -36,14 +36,22 @@ def startScreen_redrawAll(app):
               fill = 'white')
     
     #start button
+    drawRect(app.startButtonX, app.startButtonY+10, app.startButtonWidth, 
+             app.startButtonHeight, align = 'center', fill= 'black')
+    
     drawRect(app.startButtonX, app.startButtonY, app.startButtonWidth, 
              app.startButtonHeight, border='white', align = 'center', fill= None)
+    
     drawLabel('START', app.startButtonX, app.startButtonY, font='orbitron', size=40, 
               fill = 'white')
     
     #About button
+    drawRect(app.aboutButtonX, app.aboutButtonY+10, app.aboutButtonWidth, 
+             app.aboutButtonHeight, align = 'center', fill= 'black')
+    
     drawRect(app.aboutButtonX, app.aboutButtonY, app.aboutButtonWidth, 
              app.aboutButtonHeight, border='white', align = 'center', fill= None)
+    
     drawLabel('ABOUT', app.aboutButtonX, app.aboutButtonY, font='orbitron', size=40,
               fill = 'white')
     
