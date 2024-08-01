@@ -54,12 +54,13 @@ def tetrominoContact(app, tetrominoCoords):
 #chooses a random tetrimino piece and a random color
 #then scale it proportion to the board and add it to the app.tetrino list
 def getNewTetromino(app):
-    piece, color = getNextPiece()
+    piece, color = getNextPiece(app)
     app.currRow = 0
     app.currCol = (app.cols-piece.getLengthOfCol())//2
     app.rotatedTetrinoShape = piece.shape
     app.tetrinoColor = color
     turnPieceToCoord(app, piece, app.tetrinoColor)
+    app.nextPiece = turnNextPieceToCoord(app, app.nextPieceShape, app.nextPieceColor)
     if tetrominoContact(app, app.tetrinoPiece):
         app.paused = True
         app.gameOver = True
@@ -75,6 +76,19 @@ def turnPieceToCoord(app, piece, color):
                         for innerCol in range(app.tetrinoSize):
                             app.tetrinoPiece.append(((row * app.tetrinoSize + innerRow), (col * app.tetrinoSize + innerCol + startCol), color))
     app.isSandMoving = True
+
+#same function as top but returns the list instead of changing it
+def turnNextPieceToCoord(app, piece, color):
+    result = []
+    startCol = ((app.cols-piece.getLengthOfCol())//2)
+    lengthOfRow, lengthOfCol = piece.getLengthOfRow(), piece.getLengthOfCol()
+    for row in range(lengthOfRow):
+        for col in range(lengthOfCol):    
+                if piece.checkCondition(row, col) == True:
+                    for innerRow in range(app.tetrinoSize):
+                        for innerCol in range(app.tetrinoSize):
+                            result.append(((row * app.tetrinoSize + innerRow + 20), (col * app.tetrinoSize + innerCol + startCol+28), color))
+    return result
 
 #given the rotated piece shape; it rotates and expands it to match the board size
 def turnPieceShapeToCoord(app, pieceShape, color):
@@ -177,8 +191,10 @@ def rotate2dListClockwise(L):
     return M
 
 #returns a random selection of a tetrino piece and a random tetrino color in a tuple
-def getNextPiece():
-    return (random.choice(allTetrinoPieces), random.choice(TetrinoColors))
+def getNextPiece(app):
+    tempShape, tempColor = app.nextPieceShape, app.nextPieceColor
+    app.nextPieceShape, app.nextPieceColor = random.choice(allTetrinoPieces), random.choice(TetrinoColors)
+    return (tempShape, tempColor)
 
 def getRightmostCol(app):
     maxCol = None

@@ -5,6 +5,7 @@ from ClearLevel import *
 from gameStatus import *
 from StartScreen import *
 from aboutScreen import *
+import random
 
 
 #Informations and modules
@@ -58,8 +59,8 @@ def tetrinoInformations(app):
 
 
     #Next piece in rotation
-    app.nextPieceShape = []
-    app.nextPieceColor = 'green'
+    app.nextPieceShape, app.nextPieceColor = random.choice(allTetrinoPieces), random.choice(TetrinoColors)
+    app.nextPiece = []
 
 
     #current tetrino location 
@@ -206,7 +207,19 @@ def drawEndScreen(app):
                font='orbitron', size = 30)
 
 def drawNextPiece(app):
-    pass
+    #Drawing the text
+    drawLabel(f'Next Piece', 4*app.width/5, 2*app.height/10 - 20, fill = 'white',
+        size = 25, bold = True)
+    
+    #The box around the tetrino
+    if app.nextPieceShape == ipiece:
+        drawRect(4*app.width/5 + 10, 3*app.height/10-10, 200, 60, align = 'center', fill = None, border = 'white')
+    else:
+        drawRect(4*app.width/5, 3*app.height/10, 150, 100, align = 'center', fill = None, border = 'white')
+
+    #The Tetrino
+    for row, col, color in app.nextPiece:
+        drawCell(app, row, col, color)
 
 def drawTopScore(app):
     drawLabel(f'Top Score: {app.highestScore}', 4*app.width/5, 5*app.height/10, fill = 'gold',
@@ -227,6 +240,8 @@ def drawLinesCleared(app):
     drawLabel(f'Lines: {app.linesCleared}', 4*app.width/5, 8*app.height/10, fill = 'white',
               size = 24, bold = True)
 
+
+
 #Functions
 def coordToRowAndCol(app, x, y):
     #Turn pixel coordinates into the cell it's in
@@ -244,7 +259,6 @@ def resetGame(app):
     app.paused = False
     app.gameOver = False
     getNewTetromino(app)
-
 
 
 
@@ -321,6 +335,7 @@ def game_redrawAll(app):
     drawLevel(app)
     drawLinesCleared(app)
     drawTopScore(app)
+    drawNextPiece(app)
     drawTetromino(app)
     drawBoard(app)
     if app.gameOver:
