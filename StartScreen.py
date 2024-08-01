@@ -23,7 +23,7 @@ def startScreen_onAppStart(app):
     app.musicButtonHeight = 3 * app.height / 70
 
     # Music
-    app.music = False
+    app.music = True
 
 def startScreen_redrawAll(app):
     # Background

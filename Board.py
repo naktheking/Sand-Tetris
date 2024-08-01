@@ -24,6 +24,8 @@ def game_onAppStart(app):
     endScreenInformation(app)
     sandInformation(app)
     getNewTetromino(app)
+    
+    playsound(app.tetrisThemeSong, False)
 
 def boardInformations(app):
     #Rows and Cols
@@ -96,9 +98,12 @@ def gameInformation(app):
     #sounds
     sandCreedRd = 'SandCreekRd.m4a'
     sussy = 'sussy.m4a'
+    tetrisThemeSong = 'tetrisThemeSong.mp3'
     app.clearLevelSound = sandCreedRd
     app.gameOverSound = sussy
+    app.tetrisThemeSong = tetrisThemeSong
     app.music = True
+    app.musicStepsPerSecond = 0
 
 def pausedScreenInformation(app):
     #Resume button informations
@@ -331,7 +336,12 @@ def game_onKeyHold(app, keys):
         if 'right' in keys:
             moveTetromino(app, 0, 1)
 
-def game_onStep(app):    
+def game_onStep(app):   
+    app.musicStepsPerSecond += 1
+    if app.musicStepsPerSecond == 960:
+        app.musicStepsPerSecond = 0
+        playsound(app.tetrisThemeSong, False)
+
     if not app.paused and not app.gameOver:
         #lower the rate of checking connected rows so program can be faster 
         #formula divides by tetrino size; checks rows when there are no gaps between blocks
