@@ -360,19 +360,17 @@ def game_onKeyHold(app, keys):
     if not app.paused:
         if 'left' in keys and 's' in keys:
             moveTetromino(app, 0, -3)
+        elif 'left' in keys:
+            moveTetromino(app, 0, -1)
+        
         if 'right' in keys and 's' in keys:
             moveTetromino(app, 0, 3)  
-
+        elif 'right' in keys:
+            moveTetromino(app, 0, 1)
+        
         if 'down' in keys:
             app.score += 1
             moveTetromino(app, 1, 0)
-
-        if 'left' in keys:
-            moveTetromino(app, 0, -1)
-
-        elif 'right' in keys:
-            moveTetromino(app, 0, 1)
-
 
 def game_onMouseMove(app, mouseX, mouseY):
     # If mouse is over New Game button, move it down
