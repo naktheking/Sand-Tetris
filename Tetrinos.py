@@ -118,7 +118,7 @@ def checkRotateCondition(app):
 #if it does, turn everything into sands and spawn a new piece
 def moveTetromino(app, drow, dcol):
     if app.paused or app.gameOver:
-        return
+        return 
     newTetrinoPiece = []
     moved = False
     for i in range(len(app.tetrinoPiece)):
