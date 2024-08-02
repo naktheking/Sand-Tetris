@@ -25,7 +25,6 @@ def startScreen_onAppStart(app):
 
     # Music
     app.music = True
-
 def startScreen_redrawAll(app):
     # Background
     drawRect(0, 0, app.width, app.height, fill=rgb(46, 46, 46))

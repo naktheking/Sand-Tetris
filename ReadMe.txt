@@ -2,6 +2,7 @@ This project is called 'Lauren Sands-Tris' or Sandtris for short. It's a derivat
 except the blocks turn into sands when it hits the floor or other 'sand' particles. The user coudl clear a row by
 creating a connected row of sands of the same color, from left to right. 
 
+Youtube Link: https://youtu.be/6L5WikjIwU4 
 
 
 To run the game, you have to run Board.py and that's it!
