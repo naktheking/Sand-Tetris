@@ -39,7 +39,7 @@ zpiece = TetrinosPieces([[True, True, False],
 # Add all pieces to a list
 allTetrinoPieces = [ipiece, jpiece, lpiece, opiece, spiece, tpiece, zpiece]
 #Tetrino colors
-TetrinoColors = ['darkMagenta' , 'blanchedAlmond', 'lightSeaGreen', 'maroon', 'darkSalmon', 'fireBrick']
+TetrinoColors = ['darkMagenta' , 'blanchedAlmond', 'lightSeaGreen']
 
 
 #check if tetromino contacts with current sand blocks

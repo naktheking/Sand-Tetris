@@ -90,7 +90,8 @@ def gravityInformation(app):
 
 def sandInformation(app):
     #For sands to fall slower with frictioin
-    app.sandStepsPerSecond = 0
+    # app.sandStepsPerSecond = 0
+    pass
 
 def gameInformation(app):
     #Game scores and levels

@@ -2,12 +2,26 @@
 #playsound learned from https://www.geeksforgeeks.org/play-sound-in-python/ 
 from playsound import playsound
 
+#find top row of color on left side
+def findTopRowOfColorGroup(app):
+    for row in range(app.rows):
+        if not (row, 0) == None:
+            return row
+        
+    return (app.rows-1)
+
 #returns a dictionary of the top of the color groups on the left side
 #key: row     value: color
 def findAllColorGroupOnLeft(app):
     allPixelColorOnLeft = {}
+    topRow = findTopRowOfColorGroup(app)
+    bottomRow = 0   
+    amountOfRowsToCheck = app.cols/2
+    if not (topRow - amountOfRowsToCheck < 0):
+        bottomRow = topRow - amountOfRowsToCheck
+    
     #go through each cell on the left side
-    for i in range(app.rows-1, -1, -1):
+    for i in range(bottomRow, -1, -1):
         #if it is None, the every cell above it would be empty too
         if (i,0) not in app.board:
             break
