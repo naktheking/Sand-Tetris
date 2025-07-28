@@ -10,9 +10,10 @@ To run the game, you have to run Board.py and that's it!
 In Sandtris, a couple library is needed: 
 random, threading, PIL libraries are all built into python
 
+
 cmu_graphics, playsound are NOT built into python
 which you can pip install both from:
-cmu_graphics - https://pypi.org/project/cmu-graphics/
+cmu_graphics - https://pypi.org/project/cmu-graphics/  ---> Only supports Python 3.6-3.11
 playsound - https://pypi.org/project/playsound/  
 pygame - https://pypi.org/project/pygame/ 
 
